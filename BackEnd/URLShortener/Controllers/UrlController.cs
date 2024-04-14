@@ -32,7 +32,7 @@ namespace URLShortener.Controllers
             {
                 return Ok(allUrls);
             }
-            return Ok("Database is empty");
+            return NotFound("Database is empty");
         }
 
         [HttpDelete]
@@ -46,7 +46,7 @@ namespace URLShortener.Controllers
             {
                 return Ok("Url deleted successfully");
             }
-            return Ok("Couldn't find url with the specified id: " + id);
+            return NotFound("Couldn't find url with the specified id: " + id);
         }
 
         /*

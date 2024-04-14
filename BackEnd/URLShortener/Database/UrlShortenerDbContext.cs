@@ -7,11 +7,11 @@ namespace URLShortener.Database
     public class UrlShortenerDbContext : DbContext
     {
         public UrlShortenerDbContext(DbContextOptions<UrlShortenerDbContext> options) : base(options)
-    {
+        {
+        }
+
+        public DbSet<URL> Urls { get; set; }
+        public DbSet<User> Users { get; set; }
+
     }
-
-    public DbSet<URL> Urls { get; set; }
-    public DbSet<User> Users { get; set; }
-
-}
 }
