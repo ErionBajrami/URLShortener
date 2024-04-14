@@ -4,7 +4,7 @@ namespace URLShortener.Models
 {
     public class User : IdentityUser
     {
-        public String? FullName { get; set; }
+        public string? FullName { get; set; }
         public List<URL> Urls { get; set; }
         public User()
         {
