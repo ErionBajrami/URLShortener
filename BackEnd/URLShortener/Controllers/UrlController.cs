@@ -49,6 +49,38 @@ namespace URLShortener.Controllers
             return NotFound("Couldn't find url with the specified id: " + id);
         }
 
+
+        // Dont know if it works, Didnt test,
+        // Cant test hala smu ka
+        // ndreq the database problem
+        // edhe pse kesh tu fol me do programera te gjirafes
+        [HttpGet("Search")]
+        public IActionResult SearchUrl(string UrlName)
+        {
+            if(string.IsNullOrEmpty(UrlName))
+            {
+                return BadRequest("Please type something...");
+            }
+
+            var results = _context.Urls
+                .Where(url => url.OriginalUrl.Contains(UrlName, StringComparison.OrdinalIgnoreCase))
+                .Select(url => new DisplayURL()
+                {
+                    UserId = url.UserId,
+                    OriginalUrl = url.OriginalUrl,
+                    ShortUrl = url.ShortUrl,
+                    NrOfClicks = url.NrOfClicks
+                })
+                .ToList();
+
+            if(results.Any())
+            {
+                return Ok(results);
+            }
+
+            return NotFound("No matching Urls");
+        }
+
         /*
         [HttpPost("Shorten")]
         public IActionResult GetShortenUrl(string url)
