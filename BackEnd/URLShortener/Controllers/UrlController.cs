@@ -99,19 +99,24 @@ namespace URLShortener.Controllers
         
         }
 
-        /*
-        [HttpPost("Shorten")]
-        public IActionResult GetShortenUrl(string url)
+        [HttpPut("{id}")]
+        public IActionResult UpdateUrl(int id, [FromBody] URL updatedUrl)
         {
-            var newUrl = new URL()
+            var urlToUpdate = _context.Urls.FirstOrDefault(url => url.Id == id);
+
+            if (urlToUpdate == null)
             {
-                OriginalUrl = url,
-                ShortUrl = GenerateShortUrl(6),
-                NrOfClicks = 0,
-                UserId = 1, //TODO: after login is made
-                DateCreated = DateTime.UtcNow
-            };
-            return Ok(newUrl.ShortUrl);
-        } */
+                return NotFound("Couldn't find url with the specified id ": +id);
+            }
+
+            //Update the properties of the URL object based on the provided Url
+            urlToUpdate.OriginalUrl = updatedUrl.OriginalUrl;
+            updatedUrl.ShortUrl = updatedUrl.ShortUrl;
+            updatedUrl.NrOfClicks = updatedUrl.NrOfClicks;
+            updatedUrl.UserId = updatedUrl.UserId;
+
+            _context.SaveChanges();
+            return Ok("URL updated successfully");
+        }
     }
 }
