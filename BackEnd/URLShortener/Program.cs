@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using URLShortener.Data;
+// using URLShortener.Data;
 using URLShortener.Database;
 
 
@@ -12,10 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Configure the DB context
-builder.Services.AddDbContext<UrlShortenerDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+//builder.Services.AddDbContext<UrlShortenerDbContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+//});
+
+builder.Services.AddDbContext<UrlShortenerDbContext>(options => options
+    .UseNpgsql("Host=localhost;Database=URLSHORTENER;Username=postgres;Password=postgres"));
 
 var app = builder.Build();
 
@@ -33,7 +36,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 //Seed the database
-DbInitializer.SeedDefaultData(app);
+// DbInitializer.SeedDefaultData(app);
 
 app.Run();
 

@@ -57,13 +57,14 @@ namespace URLShortener.Controllers
         [HttpGet("Search")]
         public IActionResult SearchUrl(string UrlName)
         {
-            if(string.IsNullOrEmpty(UrlName))
+            if (string.IsNullOrEmpty(UrlName))
             {
                 return BadRequest("Please type something...");
             }
 
             var results = _context.Urls
-                .Where(url => url.OriginalUrl.Contains(UrlName, StringComparison.OrdinalIgnoreCase))
+                .Where(url => url.OriginalUrl.Contains(UrlName.ToLower()))
+                .ToList()
                 .Select(url => new DisplayURL()
                 {
                     UserId = url.UserId,

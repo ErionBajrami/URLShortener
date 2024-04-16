@@ -24,7 +24,7 @@ namespace URLShortener.Controllers
 
             var newUrl = new URL()
             {
-                OriginalUrl = url,
+                OriginalUrl = url.ToLower(),
                 ShortUrl = GenerateShortURL(url),
                 NrOfClicks = 0,
                 UserId = null,

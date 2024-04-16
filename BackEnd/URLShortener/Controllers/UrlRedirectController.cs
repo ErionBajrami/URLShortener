@@ -20,33 +20,41 @@ namespace URLShortener.Controllers
         public IActionResult RedirectShortUrl(string shortUrl)
         {
             // Retrieve the original long URL from the database or storage
-            string OriginalUrl = RetrieveLongUrlFromDatabase(shortUrl);
+            var url = RetrieveLongUrlFromDatabase(shortUrl);
 
-            if (string.IsNullOrEmpty(OriginalUrl))
+            if (string.IsNullOrEmpty(url))
             {
                 return NotFound();
             }
-
+            
+            
+            UpdateClicks(shortUrl);
+            _context.SaveChanges();
+            
+            
             // Perform the redirect
-            return RedirectPermanent(OriginalUrl);
+            return Ok(url);
         }
 
         private string RetrieveLongUrlFromDatabase(string shortUrl)
         {
-            // Implement logic to retrieve the long URL associated with the given short URL
-            // Example: query the database or lookup in a storage
-
-
-
             // Nuk e di a bon i cant test it now
-            var urlMappings = _context.Urls.FirstOrDefault(x => x.ShortUrl == shortUrl);
-            if(urlMappings != null)
+            var urlMapping = _context.Urls.FirstOrDefault(u => u.ShortUrl == shortUrl);
+            
+            if (urlMapping != null)
             {
-                return urlMappings.OriginalUrl;
+                return urlMapping.OriginalUrl;
             }
 
 
             return null; // Short URL not found in mappings
+        }
+
+        private void UpdateClicks(string shortUrl)
+        {
+            var entity = _context.Urls.FirstOrDefault(x => x.ShortUrl == shortUrl);
+
+            entity.NrOfClicks = entity.NrOfClicks + 1;
         }
     }
 }
