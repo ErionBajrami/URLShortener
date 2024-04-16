@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
+using URLShortener.ModelHelpers;
 using URLShortener.Models;
 
 namespace URLShortener.Controllers
@@ -13,7 +14,6 @@ namespace URLShortener.Controllers
         {
             _context = context;
         }
-        
         
 
         [HttpGet]
@@ -100,19 +100,18 @@ namespace URLShortener.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUrl(int id, [FromBody] URL updatedUrl)
+        public IActionResult UpdateUrl(int id, [FromBody] UpdateUrl updatedUrl)
         {
             var urlToUpdate = _context.Urls.FirstOrDefault(url => url.Id == id);
 
             if (urlToUpdate == null)
             {
-                return NotFound("Couldn't find url with the specified id ": +id);
+                return NotFound("Couldn't find url with the specified id :" +id);
             }
 
             //Update the properties of the URL object based on the provided Url
             urlToUpdate.OriginalUrl = updatedUrl.OriginalUrl;
             updatedUrl.ShortUrl = updatedUrl.ShortUrl;
-            updatedUrl.NrOfClicks = updatedUrl.NrOfClicks;
             updatedUrl.UserId = updatedUrl.UserId;
 
             _context.SaveChanges();

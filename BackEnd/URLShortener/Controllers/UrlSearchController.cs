@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
+using URLShortener.ModelHelpers;
 using URLShortener.Models;
 
 namespace URLShortener.Controllers;
