@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
 using URLShortener.Models;
 
@@ -22,10 +24,26 @@ namespace URLShortener.Controllers
             // I found it unnecessary to specify 
             // the length of the shortened url
 
+            var exists = _context.Urls.FirstOrDefault(x => x.OriginalUrl == url);
+            
+            if (exists != null)
+            {
+                return BadRequest("URL exists");
+            }
+
+            if (!string.IsNullOrEmpty(url))
+            {
+                string keywordToValidUrl = url.Replace("%3a%2f%2f", "://");
+                // url = _context.Urls.FirstOrDefault(x => x.OriginalUrl.ToLower().Contains(keywordToValidUrl.ToLower()));
+            }
+            
+            string ShortenedUrl = GenerateShortURL(url);
+            
+            
             var newUrl = new URL()
             {
                 OriginalUrl = url.ToLower(),
-                ShortUrl = GenerateShortURL(url),
+                ShortUrl = ShortenedUrl,
                 NrOfClicks = 0,
                 UserId = null,
                 DateCreated = DateTime.UtcNow,
@@ -67,18 +85,19 @@ namespace URLShortener.Controllers
             string base62Encoded = Base62Encode(md5Hash);
 
             // Take the first 7 characters as the short URL key
-            string shortURLKey = base62Encoded.Substring(0, 7);
+            string shortURLKey = base62Encoded.Substring(0, originalURL.Length);
 
             return shortURLKey;
         }
 
         private string ComputeMD5Hash(string input)
         {
-            using (var md5 = System.Security.Cryptography.MD5.Create())
+            using (MD5 md5 = MD5.Create())
             {
-                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
+                // Convert hash to hexadecimal string
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
@@ -89,7 +108,7 @@ namespace URLShortener.Controllers
             byte[] bytes = Convert.FromBase64String(input);
             System.Numerics.BigInteger hashValue = new System.Numerics.BigInteger(bytes);
 
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            StringBuilder sb = new StringBuilder();
             while (hashValue > 0)
             {
                 int remainder = (int)(hashValue % 62);

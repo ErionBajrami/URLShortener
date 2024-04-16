@@ -39,21 +39,19 @@ namespace URLShortener.Controllers
         public IActionResult Remove(int id)
         {
             var urlToDelete = _context.Urls.FirstOrDefault(url => url.Id == id);
+            
+            if(urlToDelete == null)
+            {
+                return NotFound("Couldn't find url with the specified id: " + id);
+            }
+            
             _context.Urls.Remove(urlToDelete);
             _context.SaveChanges();
 
-            if(urlToDelete != null)
-            {
-                return Ok("Url deleted successfully");
-            }
-            return NotFound("Couldn't find url with the specified id: " + id);
+            return Ok("URL DELETED SUCESSFULLY " + id);
         }
 
-
-        // Dont know if it works, Didnt test,
-        // Cant test hala smu ka
-        // ndreq the database problem
-        // edhe pse kesh tu fol me do programera te gjirafes
+        
         [HttpGet("Search")]
         public IActionResult SearchUrl(string UrlName)
         {
