@@ -7,16 +7,16 @@ namespace URLShortener.Controllers
 {
 
     [ApiController]
-    [Route("api/Redirect")]
-    public class UrlRedirectController : ControllerBase
+    [Route("api")]
+    public class URLRedirectController : ControllerBase
     {
         private UrlShortenerDbContext _context;
-        public UrlRedirectController(UrlShortenerDbContext context)
+        public URLRedirectController(UrlShortenerDbContext context)
         {
             _context = context;
         }
 
-        [HttpGet("/{shortUrl}")]
+        [HttpGet("redirect/{shortUrl}")]
         public IActionResult RedirectShortUrl(string shortUrl)
         {
             // Retrieve the original long URL from the database or storage

@@ -6,13 +6,15 @@ namespace URLShortener.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UrlController : Controller
+    public class URLController : Controller
     {
         private UrlShortenerDbContext _context;
-        public UrlController(UrlShortenerDbContext context)
+        public URLController(UrlShortenerDbContext context)
         {
             _context = context;
         }
+        
+        
 
         [HttpGet]
         public IActionResult GetUrls()
@@ -34,6 +36,39 @@ namespace URLShortener.Controllers
             }
             return NotFound("Database is empty");
         }
+        
+        [HttpPost]
+        public IActionResult ShortenUrl(string url)
+        {
+            
+
+            var exists = _context.Urls.FirstOrDefault(x => x.OriginalUrl == url);
+            
+            if (exists != null)
+            {
+                return BadRequest("URL exists");
+            }
+
+            // if (!string.IsNullOrEmpty(url))
+            // {
+            //     string keywordToValidUrl = url.Replace("%3a%2f%2f", "://");
+            //     // url = _context.Urls.FirstOrDefault(x => x.OriginalUrl.ToLower().Contains(keywordToValidUrl.ToLower()));
+            // }
+            
+            var newUrl = new URL()
+            {
+                OriginalUrl = url.ToLower(),
+                ShortUrl = GenerateShortUrl(5),
+                NrOfClicks = 0,
+                UserId = null,
+                DateCreated = DateTime.UtcNow,
+            };
+
+            _context.Urls.Add(newUrl);
+            _context.SaveChanges();
+            return Ok(newUrl.ShortUrl);
+        }
+
 
         [HttpDelete]
         public IActionResult Remove(int id)
@@ -50,34 +85,18 @@ namespace URLShortener.Controllers
 
             return Ok("URL DELETED SUCESSFULLY " + id);
         }
-
         
-        [HttpGet("Search")]
-        public IActionResult SearchUrl(string UrlName)
+        private string GenerateShortUrl(int length)
         {
-            if (string.IsNullOrEmpty(UrlName))
-            {
-                return BadRequest("Please type something...");
-            }
-
-            var results = _context.Urls
-                .Where(url => url.OriginalUrl.Contains(UrlName.ToLower()))
-                .ToList()
-                .Select(url => new DisplayURL()
-                {
-                    UserId = url.UserId,
-                    OriginalUrl = url.OriginalUrl,
-                    ShortUrl = url.ShortUrl,
-                    NrOfClicks = url.NrOfClicks
-                })
-                .ToList();
-
-            if(results.Any())
-            {
-                return Ok(results);
-            }
-
-            return NotFound("No matching Urls");
+            var random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        
+            return new string(
+                Enumerable.Repeat(chars, length)
+                    .Select(s => s[random.Next(s.Length)])
+                    .ToArray()
+            );
+        
         }
 
         /*
