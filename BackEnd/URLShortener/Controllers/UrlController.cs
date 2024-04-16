@@ -36,12 +36,22 @@ namespace URLShortener.Controllers
             }
             return NotFound("Database is empty");
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetUrl(int id)
+        {
+            var url = _context.Urls.FirstOrDefault(url => url.Id == id);
+            if(url == null)
+            {
+                return NotFound("Couldn't find url with the specified id: " + id);
+            }
+            return Ok(url);
+        }
+
         
         [HttpPost]
         public IActionResult ShortenUrl(string url)
         {
-            
-
             var exists = _context.Urls.FirstOrDefault(x => x.OriginalUrl == url);
             
             if (exists != null)
