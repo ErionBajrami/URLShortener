@@ -1,8 +1,11 @@
 import React from 'react'
-
+import UrlList from '../components/Url/UrlList'
 const UrlPage = () => {
+    
   return (
-    <div>UrlPage</div>
+    <div>
+        <UrlList userId={1} />
+    </div>
   )
 }
 

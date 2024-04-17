@@ -120,11 +120,11 @@ namespace URLShortener.Controllers
             {
                 return NotFound("Couldn't find url with the specified id :" +id);
             }
-
+            //TODO: USER ID DOES NOT GET UPDATED!!!
             //Update the properties of the URL object based on the provided Url
             urlToUpdate.OriginalUrl = updated.OriginalUrl;
-            updated.ShortUrl = updated.ShortUrl;
-            updated.UserId = updated.UserId;
+            urlToUpdate.ShortUrl = updated.ShortUrl;
+            urlToUpdate.UserId = updated.UserId;
 
             _context.SaveChanges();
             return Ok("URL updated successfully");
