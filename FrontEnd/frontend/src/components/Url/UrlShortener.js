@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
-import "./UrlPage.scss";
+import "./Url.scss";
 
 const UrlShortener = ({ url, setUrl, onShorten }) => {
   const shortenUrl = async () => {
     try {
-      const response = await axios.post(`http://localhost:5284/api/URL?url=${url}`);
+      const response = await axios.post(`http://localhost:7295/api/URL?url=${url}`);
       onShorten(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -20,6 +20,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
       console.error("Error fetching data:", error);
     }
   };
+
 
   return (
     <div className="containerUrl">

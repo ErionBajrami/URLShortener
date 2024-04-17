@@ -1,6 +1,11 @@
 import React, { useState } from "react";
-import UrlShortener from "./components/Url/UrlPage.js";
-import Navbar from "./components/Navbar/Navbar.js";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import HomePage from "./Pages/HomePage";
+import UrlPage from "./Pages/UrlPage";
+import SearchPage from "./Pages/SearchPage";
+import LoginPage from "./Pages/LoginPage";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -11,10 +16,16 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar/>
-      <div style={{paddingTop: "100px"}}></div>
-      <UrlShortener url={url} setUrl={setUrl} onShorten={handleShorten}/>
-      <p style={{textAlign: "center"}}>Shortened URL: {url}</p>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />}/>
+          <Route path="/urls" element={<UrlPage />}/>
+          <Route path="/search" element={<SearchPage />}/>
+          <Route path="/login" element={<LoginPage />}/>
+        </Routes>
+        <Footer />
+      </Router>
     </div>
   );
 }

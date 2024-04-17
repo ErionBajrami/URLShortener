@@ -1,5 +1,5 @@
 import React from 'react';
-import  './LoginPage.scss';
+import  './Login.scss';
 import { useHistory } from 'react-router-dom';
 
 const Loginpage = () => {
