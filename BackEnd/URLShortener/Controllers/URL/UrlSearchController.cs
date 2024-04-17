@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
@@ -9,6 +10,7 @@ namespace URLShortener.Controllers;
 
 [ApiController]
 [Route("api/search")]
+[EnableCors]
 public class URLSearchController : ControllerBase
 {
 

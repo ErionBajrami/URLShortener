@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using URLShortener.Database;
@@ -8,6 +9,7 @@ namespace URLShortener.Controllers
 
     [ApiController]
     [Route("api")]
+    [EnableCors]
     public class URLRedirectController : ControllerBase
     {
         private UrlShortenerDbContext _context;
@@ -33,7 +35,7 @@ namespace URLShortener.Controllers
             
             
             // Perform the redirect
-            return Ok(url);
+            return RedirectPermanent(url);
         }
 
         private string RetrieveLongUrlFromDatabase(string shortUrl)
