@@ -16,7 +16,7 @@ namespace URLShortener.Controllers
             _context = context;
         }
 
-        [HttpGet("redirect/{shortUrl}")]
+        [HttpGet("{shortUrl}")]
         public IActionResult RedirectShortUrl(string shortUrl)
         {
             // Retrieve the original long URL from the database or storage
