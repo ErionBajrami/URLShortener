@@ -1,6 +1,6 @@
 ﻿namespace URLShortener.ModelHelpers
 {
-        public class DisplayURL
+        public class UrlResponseDto
         {
             public int Id { get; set; }
             public string OriginalUrl { get; set; }

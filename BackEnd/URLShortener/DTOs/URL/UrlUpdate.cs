@@ -1,6 +1,6 @@
 ﻿namespace URLShortener.ModelHelpers
 {
-    public class UpdateUrl
+    public class UrlUpdate
     {
         public string OriginalUrl { get; set; }
         public string ShortUrl { get; set; }

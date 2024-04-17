@@ -21,7 +21,7 @@ namespace URLShortener.Controllers
         {
             var allUrls = _context
                 .Urls //Select only the neccessary attributes to display
-                .Select(url => new DisplayURL()
+                .Select(url => new UrlResponseDto()
                 {
                     Id = url.Id,
                     OriginalUrl = url.OriginalUrl,
@@ -110,7 +110,7 @@ namespace URLShortener.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUrl(int id, [FromBody] UpdateUrl updatedUrl)
+        public IActionResult UpdateUrl(int id, [FromBody] UrlUpdate updated)
         {
             var urlToUpdate = _context.Urls.FirstOrDefault(url => url.Id == id);
 
@@ -120,9 +120,9 @@ namespace URLShortener.Controllers
             }
 
             //Update the properties of the URL object based on the provided Url
-            urlToUpdate.OriginalUrl = updatedUrl.OriginalUrl;
-            updatedUrl.ShortUrl = updatedUrl.ShortUrl;
-            updatedUrl.UserId = updatedUrl.UserId;
+            urlToUpdate.OriginalUrl = updated.OriginalUrl;
+            updated.ShortUrl = updated.ShortUrl;
+            updated.UserId = updated.UserId;
 
             _context.SaveChanges();
             return Ok("URL updated successfully");

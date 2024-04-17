@@ -31,7 +31,7 @@ public class URLSearchController : ControllerBase
         var results = _context.Urls
             .Where(url => url.OriginalUrl.Contains(UrlName.ToLower()))
             .ToList()
-            .Select(url => new DisplayURL()
+            .Select(url => new UrlResponseDto()
             {
                 UserId = url.UserId,
                 OriginalUrl = url.OriginalUrl,
