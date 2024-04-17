@@ -5,6 +5,9 @@
     justify-content: space-around;
     align-items: center;
     padding: 10px;
+    position: fixed;
+    transition: background-color 0.3s ease;
+    width: 100%;
   
     ul {
       list-style-type: none;
