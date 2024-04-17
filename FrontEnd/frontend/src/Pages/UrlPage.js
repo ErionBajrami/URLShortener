@@ -4,7 +4,7 @@ const UrlPage = () => {
     
   return (
     <div>
-        <UrlList userId={1} />
+        <UrlList userId={2} />
     </div>
   )
 }

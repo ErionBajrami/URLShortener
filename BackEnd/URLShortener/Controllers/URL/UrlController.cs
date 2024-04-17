@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
@@ -52,7 +53,7 @@ namespace URLShortener.Controllers
 
         
         [HttpPost]
-        public IActionResult ShortenUrl(string url)
+        public IActionResult ShortenUrl(string url, int userId)
         {
             var exists = _context.Urls.FirstOrDefault(x => x.OriginalUrl == url);
             
@@ -66,16 +67,22 @@ namespace URLShortener.Controllers
             //     string keywordToValidUrl = url.Replace("%3a%2f%2f", "://");
             //     // url = _context.Urls.FirstOrDefault(x => x.OriginalUrl.ToLower().Contains(keywordToValidUrl.ToLower()));
             // }
-            
+            var user = _context.Users.Include(u => u.Urls).FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
             var newUrl = new URL()
             {
                 OriginalUrl = url.ToLower(),
                 ShortUrl = GenerateShortUrl(5),
                 NrOfClicks = 0,
-                UserId = null,
+                UserId = userId,
                 DateCreated = DateTime.UtcNow,
             };
 
+            user.Urls.Add(newUrl);
             _context.Urls.Add(newUrl);
             _context.SaveChanges();
             return Ok(newUrl.ShortUrl);

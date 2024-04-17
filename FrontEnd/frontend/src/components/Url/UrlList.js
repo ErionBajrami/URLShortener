@@ -2,18 +2,19 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios';
 import "./Url.scss";
 
-const UrlList = ({userId}) => {
+const UrlList = ({ userId }) => {
     const [urls, setUrls] = useState([]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://localhost:7295/api/URL");
+                const response = await axios.get(`https://localhost:7295/api/URL`);
                 setUrls(response.data);
-            }
-            catch(error) {
+            } catch (error) {
                 console.log("Error fetching data: ", error);
             }
         };
+
         fetchData();
     }, [userId]);
 
@@ -30,7 +31,7 @@ const UrlList = ({userId}) => {
                 </thead>
                 <tbody>
                     {urls.map((url) => (
-                        <tr>
+                        <tr key={url.id}>
                             <td>{url.originalUrl}</td>
                             <td>{url.shortUrl}</td>
                             <td>{url.nrOfClicks}</td>
@@ -38,9 +39,8 @@ const UrlList = ({userId}) => {
                     ))}
                 </tbody>
             </table>
-
         </div>
-    )
-}
+    );
+};
 
-export default UrlList
+export default UrlList;
