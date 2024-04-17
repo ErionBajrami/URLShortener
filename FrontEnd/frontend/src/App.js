@@ -12,10 +12,9 @@ function App() {
   return (
     <div className="App">
       <Navbar/>
-      <footer className="App-footer">
-        <UrlShortener url={url} setUrl={setUrl} onShorten={handleShorten} />
-        <p>Shortened URL: {url}</p>
-      </footer>
+      <div style={{paddingTop: "100px"}}></div>
+      <UrlShortener url={url} setUrl={setUrl} onShorten={handleShorten}/>
+      <p style={{textAlign: "center"}}>Shortened URL: {url}</p>
     </div>
   );
 }

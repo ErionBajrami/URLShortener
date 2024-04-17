@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import "./UrlPage.scss";
 
 const UrlShortener = ({ url, setUrl, onShorten }) => {
   const shortenUrl = async () => {
@@ -13,7 +14,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
 
   const get = async () => {
     try {
-      const response = await axios.get(`http://localhost:5284/${onShorten}`);
+      const response = await axios.get(`http://localhost:7295/${onShorten}`);
       window.location.href = response.data; // Redirect to the shortened URL
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -21,56 +22,23 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
   };
 
   return (
-    <div style={styles.container}>
+    <div className="containerUrl">
       <input
         type="text"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         placeholder="Enter URL"
-        style={styles.input}
+        className="inputUrl"
       />
-      <button style={styles.button} onClick={shortenUrl}>
+      <button className="button" onClick={shortenUrl}>
         Shorten URL
       </button>
-      <button style={styles.button} onClick={get}>
+      <button className="button" onClick={get}>
         Redirect
       </button>
     </div>
   );
 };
 
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "20px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    maxWidth: "400px",
-    margin: "0 auto",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-    fontSize: "16px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-    boxSizing: "border-box",
-  },
-  button: {
-    padding: "10px 20px",
-    fontSize: "16px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    boxShadow: "0 2px 4px rgba(0, 123, 255, 0.2)",
-    transition: "background-color 0.3s ease",
-  },
-};
 
 export default UrlShortener;
