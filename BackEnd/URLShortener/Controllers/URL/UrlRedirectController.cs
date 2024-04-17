@@ -35,12 +35,11 @@ namespace URLShortener.Controllers
             
             
             // Perform the redirect
-            return RedirectPermanent(url);
+            return Redirect(url);
         }
 
         private string RetrieveLongUrlFromDatabase(string shortUrl)
         {
-            // Nuk e di a bon i cant test it now
             var urlMapping = _context.Urls.FirstOrDefault(u => u.ShortUrl == shortUrl);
             
             if (urlMapping != null)
