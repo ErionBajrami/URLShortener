@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import UrlShortener from "./components/CreateUrlPage/CreateUrlPage.js";
+import UrlShortener from "./components/Url/UrlPage.js";
+import Navbar from "./components/Navbar/Navbar.js";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -10,12 +11,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>My React App</h1>
-      </header>
-      <main className="App-body">
-        <p>This is the body of the app.</p>
-      </main>
+      <Navbar/>
       <footer className="App-footer">
         <UrlShortener url={url} setUrl={setUrl} onShorten={handleShorten} />
         <p>Shortened URL: {url}</p>
