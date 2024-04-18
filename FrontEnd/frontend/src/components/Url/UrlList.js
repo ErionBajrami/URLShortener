@@ -8,8 +8,8 @@ const UrlList = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:7295/api/URL`);
-                setUrls(response.data);
+                const response = await axios.get(`https://localhost:7295/api/User/${userId}`);
+                setUrls(response.data.urls);
                 console.log(response.data);
             } catch (error) {
                 console.log("Error fetching data: ", error);
