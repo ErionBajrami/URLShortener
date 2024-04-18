@@ -5,7 +5,6 @@ using URLShortener.DTOs;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
 using URLShortener.Service;
-using URLShortener.Services;
 
 namespace URLShortener.Controllers
 {
@@ -67,6 +66,36 @@ namespace URLShortener.Controllers
             var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
 
             return Ok(new Dictionary<string, string>() { { "token", token } });
+        }
+        
+        [HttpPost("/signup")]
+        public IActionResult SignUp([FromBody] SignUpModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Check if the email is already registered
+            if (_context.Users.Any(u => u.Email == request.Email))
+            {
+                return Conflict("Email is already taken");
+            }
+            
+            // Create a new User entity
+            var newUser = new Models.User
+            {
+                Email = request.Email,
+                FullName = request.FullName,
+                PasswordHash = request.Password,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Add(newUser);
+            _context.SaveChanges();
+
+            return Ok(newUser);
+
         }
 
         [HttpPost] 

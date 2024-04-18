@@ -33,7 +33,7 @@ namespace URLShortener.Controllers
                     UserId = url.UserId,
                 })
                 .ToList();
-            if(allUrls != null)
+            if(allUrls.Any())
             {
                 return Ok(allUrls);
             }
