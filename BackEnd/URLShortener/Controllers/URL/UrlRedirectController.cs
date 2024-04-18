@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using URLShortener.Database;
 using URLShortener.Models;
+using URLShortener.Service;
 
 namespace URLShortener.Controllers
 {
 
     [ApiController]
-    [Route("api")]
+    [Route("/")]
     [EnableCors]
     public class URLRedirectController : ControllerBase
     {
@@ -37,7 +38,7 @@ namespace URLShortener.Controllers
             // Perform the redirect
             return Redirect(url);
         }
-
+        
         private string RetrieveLongUrlFromDatabase(string shortUrl)
         {
             var urlMapping = _context.Urls.FirstOrDefault(u => u.ShortUrl == shortUrl);
@@ -55,7 +56,7 @@ namespace URLShortener.Controllers
         {
             var entity = _context.Urls.FirstOrDefault(x => x.ShortUrl == shortUrl);
 
-            entity.NrOfClicks = entity.NrOfClicks + 1;
+            entity.NrOfClicks += 1;
         }
     }
 }

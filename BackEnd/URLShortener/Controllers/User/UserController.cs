@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
+using URLShortener.DTOs;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
+using URLShortener.Service;
 
 namespace URLShortener.Controllers
 {
@@ -26,6 +28,7 @@ namespace URLShortener.Controllers
                 {
                     Id = user.Id,
                     Email = user.Email,
+                    CreatedAt = user.CreatedAt,
                     FullName = user.FullName,
                     Urls = user.Urls
                 })
@@ -49,16 +52,40 @@ namespace URLShortener.Controllers
         }
 
         [HttpPost] 
-        public IActionResult AddUser(UserUpdate userInput)
+        public IActionResult AddUser([FromBody] SignUpModel userInput)
         {
-            var user = new User
+            try
             {
-                Email = userInput.Email,
-                FullName = userInput.FullName
-            };
-            _context.Users.Add(user);
+                var user = new User
+                {
+                    Email = userInput.Email,
+                    FullName = userInput.FullName,
+                    PasswordHash = userInput.Password
+                };
+
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                return Ok("User added successfully");
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, UserUpdate userInput)
+        {
+            var userToUpdate = _context.Users.FirstOrDefault(user=>user.Id == id);
+            if(userToUpdate == null) {
+                return NotFound("Couldn't find user with the specified id: " + id);
+            }
+
+            //Update the properties of the user
+            userToUpdate.Email = userInput.Email;
+            userToUpdate.FullName = userInput.FullName;
             _context.SaveChanges();
-            return Ok("User added successfully");
+            return Ok("User updated successfully");
         }
 
         [HttpDelete]
@@ -75,21 +102,6 @@ namespace URLShortener.Controllers
             _context.SaveChanges();
 
             return Ok("User with id: " + id + " deleted successfully");
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, UserUpdate userInput)
-        {
-            var userToUpdate = _context.Users.FirstOrDefault(user=>user.Id == id);
-            if(userToUpdate == null) {
-                return NotFound("Couldn't find user with the specified id: " + id);
-            }
-
-            //Update the properties of the user
-            userToUpdate.Email = userInput.Email;
-            userToUpdate.FullName = userInput.FullName;
-            _context.SaveChanges();
-            return Ok("User updated successfully");
         }
     }
 }
