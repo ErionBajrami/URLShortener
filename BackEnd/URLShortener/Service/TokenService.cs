@@ -10,7 +10,7 @@ public class TokenService
     public static string GenerateToken(int id, string email, string username)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA"); 
+        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA_fdskAjrfBerij"); //random letters to simulate a stronger key
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] {
@@ -29,7 +29,7 @@ public class TokenService
     public static ClaimsPrincipal VerifyToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA"); 
+        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA_fdskAjrfBerij"); 
         try
         {
             var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
