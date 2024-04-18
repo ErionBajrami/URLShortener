@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
@@ -7,6 +8,7 @@ namespace URLShortener.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class UserController : Controller
     {
         private UrlShortenerDbContext _context;
@@ -75,7 +77,7 @@ namespace URLShortener.Controllers
             return Ok("User with id: " + id + " deleted successfully");
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, UserUpdate userInput)
         {
             var userToUpdate = _context.Users.FirstOrDefault(user=>user.Id == id);

@@ -1,0 +1,33 @@
+.navbar {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    position: fixed;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  
+    ul {
+      list-style-type: none;
+      display: flex;
+      align-items: center;
+      gap: 20%;
+  
+      li {
+        margin-right: 10px;
+        font-size: 19px;
+        cursor: pointer;
+      }
+    }
+  
+    .login {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
