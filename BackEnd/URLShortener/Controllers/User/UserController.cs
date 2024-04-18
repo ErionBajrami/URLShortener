@@ -5,6 +5,7 @@ using URLShortener.DTOs;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
 using URLShortener.Service;
+using URLShortener.Services;
 
 namespace URLShortener.Controllers
 {
@@ -49,6 +50,23 @@ namespace URLShortener.Controllers
                 return NotFound("Couldn't find user with the specified id: " + id);
             }
             return Ok(user);
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginModel request)
+        {
+            var user = _context.Users
+                .Where(user => user.Email == request.Email)
+                .FirstOrDefault(user => user.PasswordHash == request.Password);
+
+            if (user == null)
+            {
+                return Unauthorized("Email or password did not match");
+            }
+
+            var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
+
+            return Ok(new Dictionary<string, string>() { { "token", token } });
         }
 
         [HttpPost] 
