@@ -67,7 +67,7 @@ namespace URLShortener.Controllers
             //     string keywordToValidUrl = url.Replace("%3a%2f%2f", "://");
             //     // url = _context.Urls.FirstOrDefault(x => x.OriginalUrl.ToLower().Contains(keywordToValidUrl.ToLower()));
             // }
-            var user = _context.Users.Include(u => u.Urls).FirstOrDefault(u => u.Id == userId);
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
             if (user == null)
             {
                 return NotFound("User not found");
@@ -82,7 +82,6 @@ namespace URLShortener.Controllers
                 DateCreated = DateTime.UtcNow,
             };
 
-            user.Urls.Add(newUrl);
             _context.Urls.Add(newUrl);
             _context.SaveChanges();
             return Ok(newUrl.ShortUrl);

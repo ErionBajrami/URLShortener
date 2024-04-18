@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
 using URLShortener.DTOs;
+using URLShortener.DTOs.User;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
 using URLShortener.Service;
@@ -30,7 +31,6 @@ namespace URLShortener.Controllers
                     Email = user.Email,
                     CreatedAt = user.CreatedAt,
                     FullName = user.FullName,
-                    Urls = user.Urls
                 })
                 .ToList();
             if(allUsers.Count > 0)
@@ -43,12 +43,25 @@ namespace URLShortener.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(int id)
         {
-            var user = _context.Users.FirstOrDefault(user => user.Id == id);
-            if(user == null)
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
             {
                 return NotFound("Couldn't find user with the specified id: " + id);
             }
-            return Ok(user);
+
+            // Fetch the URLs associated with the user
+            var userUrls = _context.Urls.Where(url => url.UserId == id).ToList();
+            var returnUser = new UserUrls
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FullName = user.FullName,
+                CreatedAt = user.CreatedAt,
+                Urls = userUrls
+            };
+            
+            return Ok(returnUser);
         }
 
         [HttpPost("login")]

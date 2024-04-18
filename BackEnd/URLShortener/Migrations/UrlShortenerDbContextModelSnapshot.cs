@@ -52,8 +52,6 @@ namespace URLShortener.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Urls");
                 });
 
@@ -83,20 +81,6 @@ namespace URLShortener.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("URLShortener.Models.URL", b =>
-                {
-                    b.HasOne("URLShortener.Models.User", "User")
-                        .WithMany("Urls")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("URLShortener.Models.User", b =>
-                {
-                    b.Navigation("Urls");
                 });
 #pragma warning restore 612, 618
         }

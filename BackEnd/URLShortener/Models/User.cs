@@ -10,11 +10,6 @@ namespace URLShortener.Models
         public string PasswordHash { get; set; }
 
         public DateTime? CreatedAt { get; set; }
-        public List<URL> Urls { get; set; }
-        public User()
-        {
-            Urls = new List<URL>();
-        }
     }
 }
 
