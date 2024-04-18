@@ -129,6 +129,13 @@ namespace URLShortener.Controllers
             }
             //TODO: USER ID DOES NOT GET UPDATED!!!
             //Update the properties of the URL object based on the provided Url
+            var userExists = _context.Users.Any(user => user.Id == updated.UserId);
+            if (!userExists)
+            {
+                return NotFound("Couldn't find user with the specified ID: " + updated.UserId);
+            }
+
+
             urlToUpdate.OriginalUrl = updated.OriginalUrl;
             urlToUpdate.ShortUrl = updated.ShortUrl;
             urlToUpdate.UserId = updated.UserId;
