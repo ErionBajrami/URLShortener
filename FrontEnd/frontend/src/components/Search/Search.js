@@ -9,7 +9,7 @@ const Search = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`https://localhost:7295/api/search?UrlName=${searchQuery}`);
+      const response = await axios.get(`http://localhost:5284/api/search?UrlName=${searchQuery}`);
       setSearchResults(response.data);
       setError('');
     }
@@ -40,7 +40,7 @@ const Search = () => {
         {searchResults.map((result) => (
           <div className='searchResult' key={result.shortUrl}>
             <p><strong>Original URL:</strong> {result.originalUrl}</p>
-            <p><strong>Short URL:</strong> {result.shortUrl}</p>
+            <p><strong>Short URL:</strong> {"http://localhost:3000/" + result.shortUrl}</p>
             <p><strong>Number of Clicks:</strong> {result.nrOfClicks}</p>
           </div>
         ))}

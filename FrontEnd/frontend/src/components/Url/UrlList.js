@@ -8,7 +8,7 @@ const UrlList = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:7295/api/User/${userId}`);
+                const response = await axios.get(`http://localhost:5284/api/User/${userId}`);
                 setUrls(response.data.urls);
                 console.log(response.data);
             } catch (error) {
@@ -34,7 +34,7 @@ const UrlList = ({ userId }) => {
                     {urls.map((url) => (
                         <tr key={url.id}>
                             <td>{url.originalUrl}</td>
-                            <td>{url.shortUrl}</td>
+                            <td>{"http://localhost:3000/" + url.shortUrl}</td>
                             <td>{url.nrOfClicks}</td>
                         </tr>
                     ))}

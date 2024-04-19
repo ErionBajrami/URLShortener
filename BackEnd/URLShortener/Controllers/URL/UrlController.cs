@@ -55,18 +55,19 @@ namespace URLShortener.Controllers
         [HttpPost]
         public IActionResult ShortenUrl(string url, int userId)
         {
+            if (!IsValidUrl(url))
+            {
+                return BadRequest("Invalid URL format. Please provide a valid URL starting with 'http://' or 'https://'.");
+            }
+            
             var exists = _context.Urls.FirstOrDefault(x => x.OriginalUrl == url);
             
             if (exists != null)
             {
                 return BadRequest("URL exists");
             }
-
-            // if (!string.IsNullOrEmpty(url))
-            // {
-            //     string keywordToValidUrl = url.Replace("%3a%2f%2f", "://");
-            //     // url = _context.Urls.FirstOrDefault(x => x.OriginalUrl.ToLower().Contains(keywordToValidUrl.ToLower()));
-            // }
+            
+            
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
             if (user == null)
             {
@@ -141,6 +142,13 @@ namespace URLShortener.Controllers
 
             _context.SaveChanges();
             return Ok("URL updated successfully");
+        }
+        
+        private bool IsValidUrl(string url)
+        {
+            // Check if URL starts with 'http://' or 'https://'
+            return Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
+                   && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

@@ -6,6 +6,7 @@ import HomePage from "./Pages/HomePage";
 import UrlPage from "./Pages/UrlPage";
 import SearchPage from "./Pages/SearchPage";
 import LoginPage from "./Pages/LoginPage";
+import Redirector from "./components/Url/Redirector";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -20,6 +21,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />}/>
+          <Route path="/:shortUrl" element={<Redirector />} />
           <Route path="/urls" element={<UrlPage />}/>
           <Route path="/search" element={<SearchPage />}/>
           <Route path="/login" element={<LoginPage />}/>

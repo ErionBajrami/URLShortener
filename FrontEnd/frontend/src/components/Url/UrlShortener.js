@@ -3,22 +3,52 @@ import axios from "axios";
 import "./Url.scss";
 
 const UrlShortener = ({ url, setUrl, onShorten }) => {
+  // const shortenUrl = async () => {
+  //   try {
+  //     const response = await axios.post(`http://localhost:5284/api/URL?url=${url}&userId=1`);
+  //     onShorten(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
+  // const get = async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:5284/${onShorten}`);
+  //     // window.location.href = response.data; // Redirect to the shortened URL
+  //     const longUrl = response.data;
+  //     window.location.href = longUrl;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
   const shortenUrl = async () => {
     try {
-      const response = await axios.post(`http://localhost:7295/api/URL?url=${url}`);
-      onShorten(response.data);
+      const response = await axios.post(`http://localhost:5284/api/URL?url=${url}&userId=1`);
+      onShorten(response.data); // Assuming response.data contains the shortened URL
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error shortening URL:", error);
     }
   };
 
   const get = async () => {
     try {
-      const response = await axios.get(`http://localhost:7295/${onShorten}`);
-      window.location.href = response.data; // Redirect to the shortened URL
+      const response = await axios.get(`http://localhost:5284/${url}`);
+      const longUrl = response.data;
+
+      // Check if the longUrl starts with a valid protocol (e.g., http:// or https://)
+      if (isValidUrl(longUrl)) {
+        window.location.replace(longUrl); // Redirect to the external URL
+      } else {
+        console.error("Invalid URL format:", longUrl);
+      }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error redirecting:", error);
     }
+  };
+
+  const isValidUrl = (url) => {
+    return url.startsWith("http://") || url.startsWith("https://");
   };
 
 

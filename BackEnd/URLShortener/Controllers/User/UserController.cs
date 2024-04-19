@@ -120,7 +120,8 @@ namespace URLShortener.Controllers
                 {
                     Email = userInput.Email,
                     FullName = userInput.FullName,
-                    PasswordHash = userInput.Password
+                    PasswordHash = userInput.Password,
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 _context.Users.Add(user);
