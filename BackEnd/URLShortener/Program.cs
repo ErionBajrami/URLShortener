@@ -3,6 +3,7 @@ using System;
 // using URLShortener.Data;
 using URLShortener.Database;
 using URLShortener.Service.Url;
+using URLShortener.Service.User;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUrlService, UrlService>();
 builder.Services.AddScoped<IUrlValidationService, UrlValidationService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Add controllers and other MVC-related services
 builder.Services.AddControllers();

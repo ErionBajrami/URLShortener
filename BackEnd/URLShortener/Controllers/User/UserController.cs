@@ -6,6 +6,7 @@ using URLShortener.DTOs.User;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
 using URLShortener.Service;
+using URLShortener.Service.User;
 
 namespace URLShortener.Controllers
 {
@@ -15,27 +16,21 @@ namespace URLShortener.Controllers
     public class UserController : Controller
     {
         private UrlShortenerDbContext _context;
-        
-        public UserController(UrlShortenerDbContext context)
+        private readonly IUserService _userService;
+
+        public UserController(UrlShortenerDbContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         [HttpGet]
         public IActionResult GetUsers()
         {
-            var allUsers = _context.Users
-                .Select(user => new User()
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    CreatedAt = user.CreatedAt,
-                    FullName = user.FullName,
-                })
-                .ToList();
-            if(allUsers.Count > 0)
+            var users = _userService.GetAllUsers();
+            if (users.Any())
             {
-                return Ok(allUsers);
+                return Ok(users);
             }
             return NotFound("No user exists in the database");
         }
@@ -43,25 +38,23 @@ namespace URLShortener.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
-
-            if (user == null)
+            var user = _userService.GetUserById(id);
+            if (user != null)
             {
-                return NotFound("Couldn't find user with the specified id: " + id);
+                return Ok(user);
             }
+            return NotFound($"User with ID {id} not found");
+        }
 
-            // Fetch the URLs associated with the user
-            var userUrls = _context.Urls.Where(url => url.UserId == id).ToList();
-            var returnUser = new UserUrls
+        [HttpGet("{id}/urls")]
+        public IActionResult GetUserWithUrls(int id)
+        {
+            var userWithUrls = _userService.GetUserWithUrls(id);
+            if (userWithUrls != null)
             {
-                Id = user.Id,
-                Email = user.Email,
-                FullName = user.FullName,
-                CreatedAt = user.CreatedAt,
-                Urls = userUrls
-            };
-            
-            return Ok(returnUser);
+                return Ok(userWithUrls);
+            }
+            return NotFound($"User with ID {id} not found");
         }
 
         [HttpPost("login")]
@@ -79,90 +72,37 @@ namespace URLShortener.Controllers
             var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
 
             return Ok(new Dictionary<string, string>() { { "token", token } });
+       
         }
         
         [HttpPost]
         public IActionResult Add([FromBody] SignUpModel request)
-        {
-            if (!ModelState.IsValid)
+        { 
+            var newUser = _userService.AddUser(request);
+            if (newUser != null)
             {
-                return BadRequest(ModelState);
+                return Ok(newUser);
             }
-
-            // Check if the email is already registered
-            if (_context.Users.Any(u => u.Email == request.Email))
-            {
-                return Conflict("Email is already taken");
-            }
-            
-            // Create a new User entity
-            var newUser = new Models.User
-            {
-                Email = request.Email,
-                FullName = request.FullName,
-                PasswordHash = request.Password,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Add(newUser);
-            _context.SaveChanges();
-
-            return Ok(newUser);
+            return Conflict("Email is already taken");
 
         }
-
-        //[HttpPost] 
-        //public IActionResult AddUser([FromBody] SignUpModel userInput)
-        //{
-        //    try
-        //    {
-        //        var user = new User
-        //        {
-        //            Email = userInput.Email,
-        //            FullName = userInput.FullName,
-        //            PasswordHash = userInput.Password,
-        //            CreatedAt = DateTime.UtcNow
-        //        };
-
-        //        _context.Users.Add(user);
-        //        _context.SaveChanges();
-        //        return Ok("User added successfully");
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception(e.Message);
-        //    }
-        //}
         
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, UserUpdate userInput)
         {
-            var userToUpdate = _context.Users.FirstOrDefault(user=>user.Id == id);
-            if(userToUpdate == null) {
-                return NotFound("Couldn't find user with the specified id: " + id);
+            var updatedUser = _userService.UpdateUser(id, userInput);
+            if (updatedUser != null)
+            {
+                return Ok(updatedUser);
             }
-
-            //Update the properties of the user
-            userToUpdate.Email = userInput.Email;
-            userToUpdate.FullName = userInput.FullName;
-            _context.SaveChanges();
-            return Ok("User updated successfully");
+            return NotFound($"User with ID {id} not found");
         }
 
         [HttpDelete]
         public IActionResult DeleteUser(int id) 
         {
-            var userToDelete = _context.Users.FirstOrDefault(user => user.Id == id);
-
-            if(userToDelete == null)
-            {
-                return NotFound("Couldn't find user with the specified id: " + id);
-            }
-
-            _context.Users.Remove(userToDelete);
-            _context.SaveChanges();
-
-            return Ok("User with id: " + id + " deleted successfully");
+            _userService.DeleteUser(id);
+            return Ok($"User with ID {id} deleted successfully");
         }
     }
 }
