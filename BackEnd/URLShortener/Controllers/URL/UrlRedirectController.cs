@@ -22,7 +22,7 @@ namespace URLShortener.Controllers
         [HttpGet("{shortUrl}")]
         public IActionResult RedirectShortUrl(string shortUrl)
         {
-            
+
             try
             {
                 // Retrieve the original long URL from the database
@@ -46,43 +46,6 @@ namespace URLShortener.Controllers
             {
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
-            // // Retrieve the original long URL from the database or storage
-            // var url = RetrieveLongUrlFromDatabase(shortUrl);
-            //
-            // if (string.IsNullOrEmpty(url))
-            // {
-            //     return NotFound();
-            // }
-            //
-            //
-            // UpdateClicks(shortUrl);
-            // _context.SaveChanges();
-            //
-            //
-            //
-            // // Perform the redirect
-            // return new RedirectResult(url);
-            // // return Redirect(url);
         }
-        
-        // private string RetrieveLongUrlFromDatabase(string shortUrl)
-        // {
-        //     var urlMapping = _context.Urls.FirstOrDefault(u => u.ShortUrl == shortUrl);
-        //     
-        //     if (urlMapping != null)
-        //     {
-        //         return urlMapping.OriginalUrl;
-        //     }
-        //
-        //
-        //     return null; // Short URL not found in mappings
-        // }
-        //
-        // private void UpdateClicks(string shortUrl)
-        // {
-        //     var entity = _context.Urls.FirstOrDefault(x => x.ShortUrl == shortUrl);
-        //
-        //     entity.NrOfClicks += 1;
-        // }
     }
 }

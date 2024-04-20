@@ -81,8 +81,8 @@ namespace URLShortener.Controllers
             return Ok(new Dictionary<string, string>() { { "token", token } });
         }
         
-        [HttpPost("/signup")]
-        public IActionResult SignUp([FromBody] SignUpModel request)
+        [HttpPost]
+        public IActionResult Add([FromBody] SignUpModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -111,28 +111,28 @@ namespace URLShortener.Controllers
 
         }
 
-        [HttpPost] 
-        public IActionResult AddUser([FromBody] SignUpModel userInput)
-        {
-            try
-            {
-                var user = new User
-                {
-                    Email = userInput.Email,
-                    FullName = userInput.FullName,
-                    PasswordHash = userInput.Password,
-                    CreatedAt = DateTime.UtcNow
-                };
+        //[HttpPost] 
+        //public IActionResult AddUser([FromBody] SignUpModel userInput)
+        //{
+        //    try
+        //    {
+        //        var user = new User
+        //        {
+        //            Email = userInput.Email,
+        //            FullName = userInput.FullName,
+        //            PasswordHash = userInput.Password,
+        //            CreatedAt = DateTime.UtcNow
+        //        };
 
-                _context.Users.Add(user);
-                _context.SaveChanges();
-                return Ok("User added successfully");
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
+        //        _context.Users.Add(user);
+        //        _context.SaveChanges();
+        //        return Ok("User added successfully");
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception(e.Message);
+        //    }
+        //}
         
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, UserUpdate userInput)

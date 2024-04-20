@@ -2,6 +2,7 @@
 using System;
 // using URLShortener.Data;
 using URLShortener.Database;
+using URLShortener.Service.Url;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IUrlService, UrlService>();
+builder.Services.AddScoped<IUrlValidationService, UrlValidationService>();
+
+// Add controllers and other MVC-related services
+builder.Services.AddControllers();
 
 //Configure the DB context
 //builder.Services.AddDbContext<UrlShortenerDbContext>(options =>
