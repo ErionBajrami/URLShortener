@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
 using URLShortener.DTOs;
@@ -58,6 +59,7 @@ namespace URLShortener.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login([FromBody] LoginModel request)
         {
             var user = _context.Users
@@ -71,11 +73,16 @@ namespace URLShortener.Controllers
 
             var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
 
-            return Ok(new Dictionary<string, string>() { { "token", token } });
+            if (token == null || token == string.Empty)
+            {
+                return BadRequest(new { message = "UserName or Password is incorrect" });
+            }
+
+            return Ok( token );
        
         }
         
-        [HttpPost]
+        [HttpPost("signup")]
         public IActionResult Add([FromBody] SignUpModel request)
         { 
             var newUser = _userService.AddUser(request);

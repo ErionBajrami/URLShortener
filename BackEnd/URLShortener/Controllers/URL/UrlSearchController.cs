@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
+using URLShortener.Service;
 
 namespace URLShortener.Controllers;
 
@@ -20,11 +21,24 @@ public class URLSearchController : ControllerBase
     {
         _context = context;
     }
-    
-    
+
+
     [HttpGet]
-    public IActionResult SearchUrl(string UrlName)
+    public IActionResult SearchUrl(string UrlName, string token)
     {
+        if (string.IsNullOrEmpty(token))
+        {
+            return Unauthorized("Token is missing");
+        }
+
+        // Verify the token
+        var principal = TokenService.VerifyToken(token);
+        if (principal == null)
+        {
+            return Unauthorized("Invalid token");
+        }
+
+
         if (string.IsNullOrEmpty(UrlName))
         {
             return BadRequest("Please type something...");
@@ -42,7 +56,7 @@ public class URLSearchController : ControllerBase
             })
             .ToList();
 
-        if(results.Any())
+        if (results.Any())
         {
             return Ok(results);
         }

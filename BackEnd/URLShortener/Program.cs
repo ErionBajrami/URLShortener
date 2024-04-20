@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using System;
+using URLShortener;
+
 // using URLShortener.Data;
 using URLShortener.Database;
 using URLShortener.Service.Url;
@@ -28,6 +31,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<UrlShortenerDbContext>(options => options
     .UseNpgsql("Host=localhost;Database=URLSHORTENER;Username=postgres;Password=postgres"));
+
 
 var app = builder.Build();
 

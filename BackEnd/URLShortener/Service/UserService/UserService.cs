@@ -8,10 +8,12 @@ namespace URLShortener.Service.User
     public class UserService : IUserService
     {
         private readonly UrlShortenerDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UserService(UrlShortenerDbContext context)
+        public UserService(IConfiguration configuration, UrlShortenerDbContext context)
         {
              _context = context;
+            _configuration = configuration;
         }
 
         public IEnumerable<UserUrls> GetAllUsers()
