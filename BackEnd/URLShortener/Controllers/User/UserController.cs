@@ -77,7 +77,7 @@ namespace URLShortener.Controllers
             {
                 // userIdString is not a valid integer
                 // Handle the error or return an appropriate response
-                return BadRequest("User id should be valid");
+                return BadRequest("User id isn't valid so urls can't be given");
             }
         }
 

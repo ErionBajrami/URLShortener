@@ -24,7 +24,7 @@ public class URLSearchController : ControllerBase
 
 
     [HttpGet]
-    public IActionResult SearchUrl(string UrlName)
+    public IActionResult SearchUrl(string UrlName, string token)
     {
 
         if (string.IsNullOrEmpty(UrlName))

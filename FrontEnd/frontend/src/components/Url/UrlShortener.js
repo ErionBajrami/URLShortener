@@ -25,7 +25,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
   const shortenUrl = async () => {
     try {
       const encodedUrl = encodeURIComponent(url);
-      const response = await axios.post(`http://localhost:5284/api/URL?url=${encodedUrl}&userId=1`);
+      const response = await axios.post(`https://localhost:7295/api/URL?url=${encodedUrl}&userId=1`);
       onShorten(response.data); // Assuming response.data contains the shortened URL
     } catch (error) {
       console.error("Error shortening URL:", error);

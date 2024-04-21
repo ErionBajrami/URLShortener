@@ -9,39 +9,40 @@ const UrlList = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:7295/api/Urls/${token}`);
+                const response = await axios.get(`https://localhost:7295/Urls/${token}`);
                 setUrls(response.data.urls);
                 console.log("response-data", response.data.urls);
             } catch (error) {
                 console.log("Error fetching data: ", error);
             }
         };
-
         fetchData();
     }, [token]);
 
     return (
         <div className="urlList-container">
-            <h2>Your Previous Urls</h2>
-            <table className="url-table">
-                <thead>
-                    <tr>
-                        <th>Original URL</th>
-                        <th>Short Url</th>
-                        <th>Number of Clicks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {urls.map((url) => (
-                        <tr key={url.id}>
-                            <td>{url.originalUrl}</td>
-                            <td>{"http://localhost:3000/" + url.shortUrl}</td>
-                            <td>{url.nrOfClicks}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+  <h2>Your Previous Urls</h2>
+  <div className="table-container">
+    <table className="url-table">
+      <thead>
+        <tr>
+          <th>Original URL</th>
+          <th>Short Url</th>
+          <th>Date Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {urls.map((url) => (
+          <tr key={url.id}>
+            <td>{url.originalUrl}</td>
+            <td>{"http://localhost:3000/" + url.shortUrl}</td>
+            <td>{url.dateCreated}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
     );
 };
 
