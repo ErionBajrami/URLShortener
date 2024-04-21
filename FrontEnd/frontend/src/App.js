@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./Pages/HomePage";
 import UrlPage from "./Pages/UrlPage";
 import SearchPage from "./Pages/SearchPage";
 import LoginPage from "./Pages/LoginPage";
-import Redirector from "./Url/Redirector";
+import Redirector from "./components/Url/Redirector";
 import PrivateOutlet from "./PrivateOutlet";
 import RegisterPage from "./Pages/RegisterPage";
 

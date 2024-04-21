@@ -1,12 +1,15 @@
 import React from 'react'
-import UrlList from '../Url/UrlList'
+import UrlList from '../components/Url/UrlList'
 import Navbar from '../components/Navbar/Navbar'
+
 const UrlPage = () => {
-    
+  
   return (
+
     <div>
         <Navbar />
-        <UrlList userId={1} />
+        <UrlList />
+        <div style={{marginBottom: "200px"}}></div>
     </div>
   )
 }

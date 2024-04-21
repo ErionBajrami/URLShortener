@@ -8,6 +8,7 @@ const SearchPage = () => {
     <div>
       <Navbar />
       <Search/>
+      <div style={{marginBottom: "200px"}}></div>
     </div>
   )
 }

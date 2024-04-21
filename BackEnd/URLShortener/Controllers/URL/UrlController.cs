@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
+using URLShortener.Service;
 using URLShortener.Service.Url;
 
 namespace URLShortener.Controllers
@@ -36,6 +37,7 @@ namespace URLShortener.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUrl(int id)
         {
+
             var url = _urlService.GetById(id);
             if(url == null)
             {

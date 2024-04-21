@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using URLShortener.Database;
 using URLShortener.DTOs;
 using URLShortener.DTOs.User;
@@ -47,15 +48,37 @@ namespace URLShortener.Controllers
             return NotFound($"User with ID {id} not found");
         }
 
-        [HttpGet("{id}/urls")]
-        public IActionResult GetUserWithUrls(int id)
+        [HttpGet("/Urls/{token}")]
+        public IActionResult GetUserWithUrls(string token)
         {
-            var userWithUrls = _userService.GetUserWithUrls(id);
-            if (userWithUrls != null)
+            if (string.IsNullOrEmpty(token))
             {
-                return Ok(userWithUrls);
+                return Unauthorized("Token is missing");
             }
-            return NotFound($"User with ID {id} not found");
+
+            // Verify the token
+            var principal = TokenService.VerifyToken(token);
+            if (principal == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+            string userIdString = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (int.TryParse(userIdString, out int userId))
+            {
+                var urls = _userService.GetUserWithUrls(userId);
+                if (urls == null)
+                {
+                    return NotFound("No URLs found for the user");
+                }
+
+                return Ok(urls);
+            }
+            else
+            {
+                // userIdString is not a valid integer
+                // Handle the error or return an appropriate response
+                return BadRequest("User id should be valid");
+            }
         }
 
         [HttpPost("login")]
