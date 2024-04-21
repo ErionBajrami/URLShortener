@@ -63,8 +63,7 @@
       }
     }
   
-    // Flexbox layout for smaller screens
-    @media (max-width: 600px) {
+ @media (max-width: 600px) {
       .url-table {
         display: flex;
         flex-direction: column;
