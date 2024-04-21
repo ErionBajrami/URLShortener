@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using URLShortener.Database;
+using URLShortener.DTOs;
+using URLShortener.DTOs.User;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
+using URLShortener.Service;
+using URLShortener.Service.User;
 
 namespace URLShortener.Controllers
 {
@@ -12,27 +17,21 @@ namespace URLShortener.Controllers
     public class UserController : Controller
     {
         private UrlShortenerDbContext _context;
-        
-        public UserController(UrlShortenerDbContext context)
+        private readonly IUserService _userService;
+
+        public UserController(UrlShortenerDbContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         [HttpGet]
         public IActionResult GetUsers()
         {
-            var allUsers = _context.Users
-                .Select(user => new User()
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FullName = user.FullName,
-                    Urls = user.Urls
-                })
-                .ToList();
-            if(allUsers.Count > 0)
+            var users = _userService.GetAllUsers();
+            if (users.Any())
             {
-                return Ok(allUsers);
+                return Ok(users);
             }
             return NotFound("No user exists in the database");
         }
@@ -40,56 +39,76 @@ namespace URLShortener.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(int id)
         {
-            var user = _context.Users.FirstOrDefault(user => user.Id == id);
-            if(user == null)
+            var user = _userService.GetUserById(id);
+            if (user != null)
             {
-                return NotFound("Couldn't find user with the specified id: " + id);
+                return Ok(user);
             }
-            return Ok(user);
+            return NotFound($"User with ID {id} not found");
         }
 
-        [HttpPost] 
-        public IActionResult AddUser(UserUpdate userInput)
+        [HttpGet("{id}/urls")]
+        public IActionResult GetUserWithUrls(int id)
         {
-            var user = new User
+            var userWithUrls = _userService.GetUserWithUrls(id);
+            if (userWithUrls != null)
             {
-                Email = userInput.Email,
-                FullName = userInput.FullName
-            };
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            return Ok("User added successfully");
+                return Ok(userWithUrls);
+            }
+            return NotFound($"User with ID {id} not found");
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginModel request)
+        {
+            var user = _context.Users
+                .Where(user => user.Email == request.Email)
+                .FirstOrDefault(user => user.PasswordHash == request.Password);
+
+            if (user == null)
+            {
+                return Unauthorized("Email or password did not match");
+            }
+
+            var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
+
+            if (token == null || token == string.Empty)
+            {
+                return BadRequest(new { message = "UserName or Password is incorrect" });
+            }
+
+            return Ok( token );
+       
+        }
+        
+        [HttpPost("signup")]
+        public IActionResult Add([FromBody] SignUpModel request)
+        { 
+            var newUser = _userService.AddUser(request);
+            if (newUser != null)
+            {
+                return Ok(newUser);
+            }
+            return Conflict("Email is already taken");
+
+        }
+        
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, UserUpdate userInput)
+        {
+            var updatedUser = _userService.UpdateUser(id, userInput);
+            if (updatedUser != null)
+            {
+                return Ok(updatedUser);
+            }
+            return NotFound($"User with ID {id} not found");
         }
 
         [HttpDelete]
         public IActionResult DeleteUser(int id) 
         {
-            var userToDelete = _context.Users.FirstOrDefault(user => user.Id == id);
-
-            if(userToDelete == null)
-            {
-                return NotFound("Couldn't find user with the specified id: " + id);
-            }
-
-            _context.Users.Remove(userToDelete);
-            _context.SaveChanges();
-
-            return Ok("User with id: " + id + " deleted successfully");
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, UserUpdate userInput)
-        {
-            var userToUpdate = _context.Users.FirstOrDefault(user=>user.Id == id);
-            if(userToUpdate == null) {
-                return NotFound("Couldn't find user with the specified id: " + id);
-            }
-
-            //Update the properties of the user
-            userToUpdate.Email = userInput.Email;
-            userToUpdate.FullName = userInput.FullName;
-            _context.SaveChanges();
-            return Ok("User updated successfully");
+            _userService.DeleteUser(id);
+            return Ok($"User with ID {id} deleted successfully");
         }
     }
 }

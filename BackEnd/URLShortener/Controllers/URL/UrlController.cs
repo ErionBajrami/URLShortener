@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
+using URLShortener.Service.Url;
 
 namespace URLShortener.Controllers
 {
@@ -12,28 +13,20 @@ namespace URLShortener.Controllers
     [EnableCors]
     public class URLController : Controller
     {
-        private UrlShortenerDbContext _context;
-        public URLController(UrlShortenerDbContext context)
+        private readonly IUrlService _urlService;
+        private readonly IUrlValidationService _urlValidationService;
+        public URLController(IUrlService urlService, IUrlValidationService urlValidationService)
         {
-            _context = context;
+            _urlService = urlService;
+            _urlValidationService = urlValidationService;
         }
-        
+
 
         [HttpGet]
         public IActionResult GetUrls()
         {
-            var allUrls = _context
-                .Urls //Select only the neccessary attributes to display
-                .Select(url => new UrlResponseDto()
-                {
-                    Id = url.Id,
-                    OriginalUrl = url.OriginalUrl,
-                    ShortUrl = url.ShortUrl,
-                    NrOfClicks = url.NrOfClicks,
-                    UserId = url.UserId,
-                })
-                .ToList();
-            if(allUrls != null)
+            var allUrls = _urlService.GetAllUrls();
+            if(allUrls.Any())
             {
                 return Ok(allUrls);
             }
@@ -43,7 +36,7 @@ namespace URLShortener.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUrl(int id)
         {
-            var url = _context.Urls.FirstOrDefault(url => url.Id == id);
+            var url = _urlService.GetById(id);
             if(url == null)
             {
                 return NotFound("Couldn't find url with the specified id: " + id);
@@ -55,86 +48,44 @@ namespace URLShortener.Controllers
         [HttpPost]
         public IActionResult ShortenUrl(string url, int userId)
         {
-            var exists = _context.Urls.FirstOrDefault(x => x.OriginalUrl == url);
-            
-            if (exists != null)
+            if (!_urlValidationService.IsValidUrl(url))
             {
-                return BadRequest("URL exists");
+                return BadRequest("Invalid URL format Please provide a valid URL starting with 'http://' or 'https://'.");
             }
-
-            // if (!string.IsNullOrEmpty(url))
-            // {
-            //     string keywordToValidUrl = url.Replace("%3a%2f%2f", "://");
-            //     // url = _context.Urls.FirstOrDefault(x => x.OriginalUrl.ToLower().Contains(keywordToValidUrl.ToLower()));
-            // }
-            var user = _context.Users.Include(u => u.Urls).FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+            try
             {
-                return NotFound("User not found");
+                var shortUrl = _urlService.ShortenUrl(url, userId);
+                return Ok(shortUrl);
             }
-
-            var newUrl = new URL()
+            catch (Exception ex)
             {
-                OriginalUrl = url.ToLower(),
-                ShortUrl = GenerateShortUrl(5),
-                NrOfClicks = 0,
-                UserId = userId,
-                DateCreated = DateTime.UtcNow,
-            };
-
-            user.Urls.Add(newUrl);
-            _context.Urls.Add(newUrl);
-            _context.SaveChanges();
-            return Ok(newUrl.ShortUrl);
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpDelete]
         public IActionResult Remove(int id)
         {
-            var urlToDelete = _context.Urls.FirstOrDefault(url => url.Id == id);
-            
-            if(urlToDelete == null)
-            {
-                return NotFound("Couldn't find url with the specified id: " + id);
-            }
-            
-            _context.Urls.Remove(urlToDelete);
-            _context.SaveChanges();
-
-            return Ok("URL DELETED SUCESSFULLY " + id);
+           _urlService.DeleteUrl(id);
+            return Ok("URL Deleted Succesfully");
         }
         
-        private string GenerateShortUrl(int length)
-        {
-            var random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        
-            return new string(
-                Enumerable.Repeat(chars, length)
-                    .Select(s => s[random.Next(s.Length)])
-                    .ToArray()
-            );
-        
-        }
+   
 
         [HttpPut("{id}")]
         public IActionResult UpdateUrl(int id, [FromBody] UrlUpdate updated)
         {
-            var urlToUpdate = _context.Urls.FirstOrDefault(url => url.Id == id);
-
-            if (urlToUpdate == null)
+            try
             {
-                return NotFound("Couldn't find url with the specified id :" +id);
+                _urlService.UpdateUrl(id, updated);
+                return Ok("URL updated Successfully");
             }
-            //TODO: USER ID DOES NOT GET UPDATED!!!
-            //Update the properties of the URL object based on the provided Url
-            urlToUpdate.OriginalUrl = updated.OriginalUrl;
-            urlToUpdate.ShortUrl = updated.ShortUrl;
-            urlToUpdate.UserId = updated.UserId;
-
-            _context.SaveChanges();
-            return Ok("URL updated successfully");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+        
     }
 }

@@ -8,8 +8,9 @@ const UrlList = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:7295/api/URL`);
-                setUrls(response.data);
+                const response = await axios.get(`https://localhost:7295/api/User/${userId}/urls`);
+                setUrls(response.data.urls);
+                console.log("response-data", response.data.urls);
             } catch (error) {
                 console.log("Error fetching data: ", error);
             }
@@ -33,7 +34,7 @@ const UrlList = ({ userId }) => {
                     {urls.map((url) => (
                         <tr key={url.id}>
                             <td>{url.originalUrl}</td>
-                            <td>{url.shortUrl}</td>
+                            <td>{"http://localhost:3000/" + url.shortUrl}</td>
                             <td>{url.nrOfClicks}</td>
                         </tr>
                     ))}

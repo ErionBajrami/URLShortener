@@ -3,14 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace URLShortener.Services;
+namespace URLShortener.Service;
 
 public class TokenService
 {
     public static string GenerateToken(int id, string email, string username)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA_fdskAjrfBerij"); //random letters to simulate a stronger key
+        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA_242424242424242424"); //random letters to simulate a stronger key
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] {
@@ -29,7 +29,7 @@ public class TokenService
     public static ClaimsPrincipal VerifyToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA_fdskAjrfBerij"); 
+        var key = Encoding.ASCII.GetBytes("LIFE_FROM_GJIRAFA_242424242424242424"); 
         try
         {
             var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters

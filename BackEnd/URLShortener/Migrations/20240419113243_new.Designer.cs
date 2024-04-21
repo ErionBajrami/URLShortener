@@ -12,8 +12,8 @@ using URLShortener.Database;
 namespace URLShortener.Migrations
 {
     [DbContext(typeof(UrlShortenerDbContext))]
-    [Migration("20240416223133_Postgres-Initial")]
-    partial class PostgresInitial
+    [Migration("20240419113243_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,8 +55,6 @@ namespace URLShortener.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Urls");
                 });
 
@@ -68,6 +66,9 @@ namespace URLShortener.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -76,23 +77,13 @@ namespace URLShortener.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("URLShortener.Models.URL", b =>
-                {
-                    b.HasOne("URLShortener.Models.User", "User")
-                        .WithMany("Urls")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("URLShortener.Models.User", b =>
-                {
-                    b.Navigation("Urls");
                 });
 #pragma warning restore 612, 618
         }
