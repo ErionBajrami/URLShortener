@@ -8,7 +8,7 @@ const UrlList = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:7295/api/User/${userId}/urls`);
+                const response = await axios.get(`http://localhost:7295/api/User/${userId}/urls`);
                 setUrls(response.data.urls);
                 console.log("response-data", response.data.urls);
             } catch (error) {

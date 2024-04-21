@@ -25,7 +25,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
   const shortenUrl = async () => {
     try {
       const encodedUrl = encodeURIComponent(url);
-      const response = await axios.post(`https://localhost:7295/api/URL?url=${encodedUrl}&userId=1`);
+      const response = await axios.post(`http://localhost:5284/api/URL?url=${encodedUrl}&userId=1`);
       onShorten(response.data); // Assuming response.data contains the shortened URL
     } catch (error) {
       console.error("Error shortening URL:", error);
@@ -35,7 +35,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
   const get = async () => {
     try {
       const encodedUrl = encodeURIComponent(url);
-      const response = await axios.get(`https://localhost:7295/${encodedUrl}`);
+      const response = await axios.get(`http://localhost:5284/${encodedUrl}`);
       const longUrl = response.data;
 
       // Check if the longUrl starts with a valid protocol (e.g., http:// or https://)

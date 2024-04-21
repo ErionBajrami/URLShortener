@@ -9,7 +9,7 @@ const Search = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`https://localhost:7295/api/search?UrlName=${searchQuery}`);
+      const response = await axios.get(`http://localhost:5284/api/search?UrlName=${searchQuery}`);
       setSearchResults(response.data);
       setError('');
     }
