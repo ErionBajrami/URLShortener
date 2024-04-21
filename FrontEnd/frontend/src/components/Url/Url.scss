@@ -35,30 +35,58 @@
 
 .urlList-container {
     padding-top: 110px;
-
+  
     h2 {
-        margin-bottom: 20px;
-        font-size: 20px;
-        font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: bold;
     }
-
+  
+    // Table styles for larger screens
     .url-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th, td {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+  
+      th, td {
         padding: 12px;
         border: 1px solid #ccc;
         text-align: left;
-    }
-
-    th {
+      }
+  
+      th {
         background-color: #f2f2f2;
-    }
-
-    tbody tr:nth-child(even) {
+      }
+  
+      tbody tr:nth-child(even) {
         background-color: #f9f9f9;
+      }
     }
-}
+  
+    // Flexbox layout for smaller screens
+    @media (max-width: 600px) {
+      .url-table {
+        display: flex;
+        flex-direction: column;
+  
+        tr {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #ccc;
+          margin-bottom: 10px;
+        }
+  
+        th, td {
+          padding: 12px;
+          border-bottom: 1px solid #ccc;
+          text-align: left;
+        }
+  
+        th {
+          background-color: #f2f2f2;
+        }
+      }
+    }
+  }
+  
 
