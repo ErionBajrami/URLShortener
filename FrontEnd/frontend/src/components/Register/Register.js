@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { register } from '../../AuthService';
+import axios from 'axios';
 import { Navigate, Link } from 'react-router-dom';
 import './Register.scss'; 
 
@@ -14,7 +14,7 @@ function Register() {
     e.preventDefault();
     try {
       // Call register function from AuthService with email, password, and full name
-      await register(email, password, fullName);
+      const response = await axios.post('https://localhost:7295/api/User/signup', { email, password, fullName });
       setRegistered(true); // Set registered status to true
       setError('');
     } catch (error) {
@@ -22,7 +22,7 @@ function Register() {
     }
   };
 
-  // If registered, redirect to the home page
+  // If registered, redirect to the login page
   if (registered) {
     return <Navigate to="/login" />;
   }

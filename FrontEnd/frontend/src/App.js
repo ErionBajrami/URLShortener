@@ -6,12 +6,13 @@ import HomePage from "./Pages/HomePage";
 import UrlPage from "./Pages/UrlPage";
 import SearchPage from "./Pages/SearchPage";
 import LoginPage from "./Pages/LoginPage";
-import Redirector from "./components/Url/Redirector";
+import Redirector from "./Url/Redirector";
 import PrivateOutlet from "./PrivateOutlet";
 import RegisterPage from "./Pages/RegisterPage";
 
 function App() {
   const [url, setUrl] = useState("");
+  console.log('Token stored:', localStorage.getItem('token'));
 
   const handleShorten = (shortenedUrl) => {
     setUrl(shortenedUrl);
@@ -20,7 +21,6 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar />
         <Routes>
           <Route path="/login" element={<LoginPage />}/>
           <Route path="/register" element={<RegisterPage />}/>

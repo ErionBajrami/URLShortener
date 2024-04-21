@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from '../components/Navbar/Navbar'
-import UrlShortener from "../components/Url/UrlShortener.js";
+import UrlShortener from "../Url/UrlShortener.js";
 
 const HomePage = () => {
     const [url, setUrl] = useState("");

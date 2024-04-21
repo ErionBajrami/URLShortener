@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './Navbar.scss';
 import { Link } from 'react-router-dom';
-import { logout, getToken } from '../../AuthService'; // Import getToken from AuthService
 
 const Navbar = () => {
-  // Check if user is authenticated
-  const isAuthenticated = getToken() !== null;
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  console.log('isAuthenticated', isAuthenticated)
+
+  useEffect(() => {
+    // Check if user is authenticated by verifying token existence
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(token !== null);
+  }, []);
+
+  const handleLogout = () => {
+    // Clear token from storage upon logout
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+  };
 
   return (
     <div className="navbar">
@@ -24,17 +36,20 @@ const Navbar = () => {
       </div>
       <div>
         {/* Conditionally render login or logout button */}
-        {!isAuthenticated && (
+        {isAuthenticated ? (
+          <Link to="/login">
+          <button className='login' onClick={handleLogout}>Log out</button>
+          </Link>
+        ) : (
           <Link to="/login">
             <button className='login'>Log in</button>
           </Link>
         )}
-        {isAuthenticated && (
-          <button className='login' onClick={logout()}>Log out</button>
-        )}
-      </div> 
+      </div>
     </div>
   );
 }
 
 export default Navbar;
+
+

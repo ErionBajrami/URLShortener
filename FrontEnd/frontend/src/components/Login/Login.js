@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { login } from '../../AuthService';
 import { Navigate } from 'react-router-dom';
 import './Login.scss'; 
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -10,13 +10,17 @@ function LoginForm() {
   const [error, setError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
 
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = await login(email, password);
+      const response = await axios.post('https://localhost:7295/api/User/login', { email, password });
+      const token = response.data;
       console.log('Login successful! Token:', token);
-      setLoggedIn(true);
       setError('');
+      localStorage.setItem('token', token);
+      setLoggedIn(true)
     } catch (error) {
       setError('Email or password is incorrect');
     }

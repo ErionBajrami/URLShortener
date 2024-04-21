@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import './Search.scss'
-import {getToken} from '../../AuthService';
 import { Link } from 'react-router-dom';
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
