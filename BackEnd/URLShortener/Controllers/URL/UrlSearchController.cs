@@ -24,8 +24,9 @@ public class URLSearchController : ControllerBase
 
 
     [HttpGet]
-    public IActionResult SearchUrl(string UrlName, string token)
+    public IActionResult SearchUrl(string UrlName)
     {
+        /** TODO: After implementing token to be saved
         if (string.IsNullOrEmpty(token))
         {
             return Unauthorized("Token is missing");
@@ -36,7 +37,7 @@ public class URLSearchController : ControllerBase
         if (principal == null)
         {
             return Unauthorized("Invalid token");
-        }
+        } */
 
 
         if (string.IsNullOrEmpty(UrlName))

@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import Login from '../components/Login/Login';
 
 const LoginPage = () => {
   return (
-    <div>LoginPage</div>
+    <div style={{paddingTop: "120px"}}><Login/></div>
   )
 }
 

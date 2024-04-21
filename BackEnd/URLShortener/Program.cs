@@ -20,6 +20,7 @@ builder.Services.AddScoped<IUrlService, UrlService>();
 builder.Services.AddScoped<IUrlValidationService, UrlValidationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+
 // Add controllers and other MVC-related services
 builder.Services.AddControllers();
 

@@ -1,26 +1,48 @@
-import React from 'react';
-import  './Login.scss';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { login } from '../../AuthService';
+import { Navigate } from 'react-router-dom';
+import './Login.scss'; 
+import { Link } from 'react-router-dom';
 
-const Loginpage = () => {
+function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
 
-    const history = useHistory();
-        
-    const navigateToCreateUrl = () => {
-        history.push('./HomePage');
-    };
-      
-    return (
-        <div className ="Loginpage-container">
-            <div className="logo-container">
-                <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXXjpNyEttzp467chiflgYdYC9wgi4SP2Pg9InjvpGFA&s' alt="sdi" className="logo-image" />
-            </div>
-            <div className='login-container'>
-                <button className="login-button" onClick={navigateToCreateUrl}>Login</button>
-                <button className="login-button">Sign Up</button>
-            </div>
-        </div>
-    );
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = await login(email, password);
+      console.log('Login successful! Token:', token);
+      setLoggedIn(true);
+      setError('');
+    } catch (error) {
+      setError('Email or password is incorrect');
+    }
+  };
 
-export default Loginpage;
+  if (loggedIn) {
+    return <Navigate to="/" />;
+  }
+
+  return (
+    <form className="login-form" onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label>Email:</label>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label>Password:</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </div>
+      {error && <div className="error-message">{error}</div>}
+      <button type="submit" className="submit-btn">Login</button>
+      <p>Don't have an account? <Link to="/register" className="registerLink">Register here</Link></p>
+    </form>
+  );
+}
+
+export default LoginForm;
+
+

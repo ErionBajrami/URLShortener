@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import './Search.scss'
-
+import {getToken} from '../../AuthService';
+import { Link } from 'react-router-dom';
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -9,7 +10,7 @@ const Search = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`http://localhost:5284/api/search?UrlName=${searchQuery}`);
+      const response = await axios.get(`https://localhost:7295/api/search?UrlName=${searchQuery}`);
       setSearchResults(response.data);
       setError('');
     }
@@ -45,7 +46,7 @@ const Search = () => {
           </div>
         ))}
       </div>
-      <a href='\'>Go back to home</a>
+      <Link to='\'>Go back to home</Link>
     </div>
   )
 }

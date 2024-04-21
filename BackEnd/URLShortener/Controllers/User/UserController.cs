@@ -59,7 +59,6 @@ namespace URLShortener.Controllers
         }
 
         [HttpPost("login")]
-        [AllowAnonymous]
         public IActionResult Login([FromBody] LoginModel request)
         {
             var user = _context.Users
