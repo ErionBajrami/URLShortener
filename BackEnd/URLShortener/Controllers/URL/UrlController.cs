@@ -70,10 +70,10 @@ namespace URLShortener.Controllers
 
 
         [HttpDelete("{id}")]
-        public IActionResult Remove(string shortUrl)
+        public IActionResult Remove(int id)
         {
          
-           _urlService.DeleteUrl(shortUrl);
+           _urlService.DeleteUrl(id);
             return Ok("URL Deleted Succesfully");
         }
         
