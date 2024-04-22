@@ -8,9 +8,8 @@ const Search = () => {
   const [error, setError] = useState('');
 
   const handleSearch = async () => {
-    const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`https://localhost:7295/api/search?UrlName=${searchQuery}&token=${token}`);
+      const response = await axios.get(`http://localhost:5284/api/search?UrlName=${searchQuery}`);
       setSearchResults(response.data);
       setError('');
     }
