@@ -51,34 +51,14 @@ namespace URLShortener.Controllers
         [HttpGet("/Urls/{token}")]
         public IActionResult GetUserWithUrls(string token)
         {
-            if (string.IsNullOrEmpty(token))
+            int userId = Authentication.GetUserIdFromToken(token);
+            var urls = _userService.GetUserWithUrls(userId);
+            if (urls == null)
             {
-                return Unauthorized("Token is missing");
+                return NotFound("No URLs found for the user");
             }
 
-            // Verify the token
-            var principal = TokenService.VerifyToken(token);
-            if (principal == null)
-            {
-                return Unauthorized("Invalid token");
-            }
-            string userIdString = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (int.TryParse(userIdString, out int userId))
-            {
-                var urls = _userService.GetUserWithUrls(userId);
-                if (urls == null)
-                {
-                    return NotFound("No URLs found for the user");
-                }
-
-                return Ok(urls);
-            }
-            else
-            {
-                // userIdString is not a valid integer
-                // Handle the error or return an appropriate response
-                return BadRequest("User id isn't valid so urls can't be given");
-            }
+            return Ok(urls);
         }
 
         [HttpPost("login")]

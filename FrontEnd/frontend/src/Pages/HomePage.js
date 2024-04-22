@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import Navbar from '../components/Navbar/Navbar'
 import UrlShortener from "../components/Url/UrlShortener";
-import UrlList from "../components/Url/UrlList";
+import HomeUrl from "../components/Url/HomeUrl";
 
 const HomePage = () => {
     const [url, setUrl] = useState("");
-
     const handleShorten = (shortenedUrl) => {
       setUrl(shortenedUrl);
     };
@@ -15,7 +14,7 @@ const HomePage = () => {
         <div style={{paddingTop: "100px"}}></div>
         <UrlShortener url={url} setUrl={setUrl} onShorten={handleShorten}/>
         <p style={{textAlign: "center"}}>Shortened URL: {url}</p>
-        <UrlList/>
+        <HomeUrl />
         <div style={{marginBottom: "200px"}}></div>
     </div>
   )

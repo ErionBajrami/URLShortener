@@ -27,30 +27,13 @@ public class URLSearchController : ControllerBase
     [HttpGet]
     public IActionResult SearchUrl(string UrlName, string token)
     {
-        if (string.IsNullOrEmpty(token))
-        {
-            return Unauthorized("Token is missing");
-        }
-
-        // Verify the token
-        var principal = TokenService.VerifyToken(token);
-        if (principal == null)
-        {
-            return Unauthorized("Invalid token");
-        }
 
         if (string.IsNullOrEmpty(UrlName))
         {
             return BadRequest("Please type something...");
         }
 
-        // Extract the user ID from the token
-        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
-        if (userIdClaim == null)
-        {
-            return Unauthorized("User ID not found in token");
-        }
-        var userId = int.Parse(userIdClaim.Value);
+        int userId = Authentication.GetUserIdFromToken(token);
 
         // Search for URLs belonging to the authenticated user
         var results = _context.Urls
@@ -60,7 +43,8 @@ public class URLSearchController : ControllerBase
             {
                 UserId = url.UserId,
                 OriginalUrl = url.OriginalUrl,
-                ShortUrl = url.ShortUrl
+                ShortUrl = url.ShortUrl,
+                Description = url.Description
             })
             .ToList();
 

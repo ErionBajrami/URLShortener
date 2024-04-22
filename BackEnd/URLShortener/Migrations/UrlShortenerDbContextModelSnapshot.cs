@@ -36,6 +36,9 @@ namespace URLShortener.Migrations
                     b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<int>("NrOfClicks")
                         .HasColumnType("integer");
 

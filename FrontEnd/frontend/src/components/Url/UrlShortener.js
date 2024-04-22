@@ -22,15 +22,36 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
   //     console.error("Error fetching data:", error);
   //   }
   // };
+  const [description, setDescription] = useState("");
+  const [urls, setUrls] = useState([]);
+  const token  = localStorage.getItem('token');
+
   const shortenUrl = async () => {
+    const token = localStorage.getItem('token');
     try {
       const encodedUrl = encodeURIComponent(url);
-      const response = await axios.post(`https://localhost:7295/api/URL?url=${encodedUrl}&userId=1`);
-      onShorten(response.data); // Assuming response.data contains the shortened URL
+      const encodedDescription = encodeURIComponent(description); // Encode the description
+      const response = await axios.post(
+        `https://localhost:7295/api/URL?url=${encodedUrl}&token=${token}&description=${encodedDescription}`
+      );
+      onShorten(response.data);
     } catch (error) {
       console.error("Error shortening URL:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`https://localhost:7295/Urls/${token}`);
+            setUrls(response.data.urls);
+            console.log("response-data", response.data.urls);
+        } catch (error) {
+            console.log("Error fetching data: ", error);
+        }
+    };
+    fetchData();
+}, [token]);
 
   const get = async () => {
     try {
@@ -63,11 +84,15 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
         placeholder="Enter URL"
         className="inputUrl"
       />
+      <input
+        type="text"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Enter Description"
+        className="inputUrl" 
+      />
       <button className="button" onClick={shortenUrl}>
         Shorten URL
-      </button>
-      <button className="button" onClick={get}>
-        Redirect
       </button>
     </div>
   );

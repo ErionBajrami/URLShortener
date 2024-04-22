@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Security.Claims;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
@@ -48,15 +50,16 @@ namespace URLShortener.Controllers
 
         
         [HttpPost]
-        public IActionResult ShortenUrl(string url, int userId)
+        public IActionResult ShortenUrl(string url, string token, string description)
         {
+        
             if (!_urlValidationService.IsValidUrl(url))
             {
                 return BadRequest("Invalid URL format Please provide a valid URL starting with 'http://' or 'https://'.");
             }
             try
             {
-                var shortUrl = _urlService.ShortenUrl(url, userId);
+                var shortUrl = _urlService.ShortenUrl(url, token, description);
                 return Ok(shortUrl);
             }
             catch (Exception ex)
@@ -76,11 +79,11 @@ namespace URLShortener.Controllers
    
 
         [HttpPut("{id}")]
-        public IActionResult UpdateUrl(int id, [FromBody] UrlUpdate updated)
+        public IActionResult UpdateUrl(int id, string description)
         {
             try
             {
-                _urlService.UpdateUrl(id, updated);
+                _urlService.UpdateUrl(id, description);
                 return Ok("URL updated Successfully");
             }
             catch (Exception ex)
@@ -88,6 +91,6 @@ namespace URLShortener.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
     }
 }

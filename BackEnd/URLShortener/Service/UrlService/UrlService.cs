@@ -2,12 +2,12 @@
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
+using URLShortener.Controllers;
 
 namespace URLShortener.Service.Url
 {
     public class UrlService : IUrlService
     {
-
         private readonly UrlShortenerDbContext _context;
 
         public UrlService(UrlShortenerDbContext context)
@@ -35,14 +35,15 @@ namespace URLShortener.Service.Url
             return _context.Urls.FirstOrDefault(url => url.Id == id);
         }
 
-        public string ShortenUrl(string originalUrl, int userId)
+        public string ShortenUrl(string originalUrl, string token, string description)
         {
+            int userId = Authentication.GetUserIdFromToken(token);
             if (!_context.Users.Any(u => u.Id == userId))
             {
                 throw new ArgumentException("User not found");
             }
 
-            var existingUrl = _context.Urls.FirstOrDefault(u => u.OriginalUrl == originalUrl);
+            var existingUrl = _context.Urls.FirstOrDefault(u => u.OriginalUrl == originalUrl && u.UserId == userId);
             if (existingUrl != null)
             {
                 throw new InvalidOperationException("URL already exists");
@@ -55,6 +56,7 @@ namespace URLShortener.Service.Url
                 NrOfClicks = 0,
                 UserId = userId,
                 DateCreated = DateTime.UtcNow,
+                Description = description
             };
 
             _context.Urls.Add(newUrl);
@@ -73,15 +75,12 @@ namespace URLShortener.Service.Url
             }
         }
 
-        public void UpdateUrl(int id, UrlUpdate updatedUrl)
+        public void UpdateUrl(int id, string description)
         {
             var urlToUpdate = _context.Urls.FirstOrDefault(url => url.Id == id);
             if (urlToUpdate != null)
             {
-                urlToUpdate.OriginalUrl = updatedUrl.OriginalUrl;
-                urlToUpdate.ShortUrl = updatedUrl.ShortUrl;
-                urlToUpdate.UserId = updatedUrl.UserId;
-
+                urlToUpdate.Description = description;
                 _context.SaveChanges();
             }
         }

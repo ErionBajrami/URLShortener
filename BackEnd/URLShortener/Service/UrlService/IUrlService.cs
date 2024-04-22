@@ -7,9 +7,9 @@ namespace URLShortener.Service.Url
     {
         IEnumerable<UrlResponseDto> GetAllUrls();
         URL GetById(int id);
-        string ShortenUrl(string originalUrl, int userId);
+        string ShortenUrl(string originalUrl, string tokens, string description);
         void DeleteUrl(int id);
-        void UpdateUrl(int id, UrlUpdate updatedUrl);
+        void UpdateUrl(int id, string description);
     }
 
 }

@@ -10,13 +10,13 @@
     margin: 0 auto;
 
     .inputUrl {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
 
     .button {
@@ -33,6 +33,7 @@
     }
 }
 
+
 .urlList-container {
     padding-top: 110px;
   
@@ -41,6 +42,7 @@
       font-size: 20px;
       font-weight: bold;
     }
+
   
     // Table styles for larger screens
     .url-table {
@@ -61,9 +63,34 @@
       tbody tr:nth-child(even) {
         background-color: #f9f9f9;
       }
+
+      input {
+        width: 100%;
+        padding: 4px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        border: 1px solid #ccc;
+        padding: 8px 10px;
+        font-size: 15px;
+        color: white;
+        font-weight: bolder;
+      }
+
+      #editBtn {
+        background-color: red;
+      }
+
+      #doneBtn {
+        background-color: green;
+      }
     }
   
- @media (max-width: 600px) {
+ @media (max-width: 800px) {
       .url-table {
         display: flex;
         flex-direction: column;
@@ -87,5 +114,8 @@
       }
     }
   }
+
+
+
   
 

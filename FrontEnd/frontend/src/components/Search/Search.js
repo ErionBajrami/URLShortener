@@ -12,6 +12,7 @@ const Search = () => {
     try {
       const response = await axios.get(`https://localhost:7295/api/search?UrlName=${searchQuery}&token=${token}`);
       setSearchResults(response.data);
+      console.log('response', response.data);
       setError('');
     }
     catch (error) {
@@ -42,7 +43,7 @@ const Search = () => {
           <div className='searchResult' key={result.shortUrl}>
             <p><strong>Original URL:</strong> {result.originalUrl}</p>
             <p><strong>Short URL:</strong> {"http://localhost:3000/" + result.shortUrl}</p>
-            <p><strong>Number of Clicks:</strong> {result.nrOfClicks}</p>
+            <p><strong>Description</strong> {result.description}</p>
           </div>
         ))}
       </div>

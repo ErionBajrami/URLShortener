@@ -12,8 +12,8 @@ using URLShortener.Database;
 namespace URLShortener.Migrations
 {
     [DbContext(typeof(UrlShortenerDbContext))]
-    [Migration("20240419113243_new")]
-    partial class @new
+    [Migration("20240422173108_Initial-Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace URLShortener.Migrations
 
                     b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<int>("NrOfClicks")
                         .HasColumnType("integer");
