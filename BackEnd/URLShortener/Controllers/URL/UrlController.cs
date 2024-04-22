@@ -48,7 +48,7 @@ namespace URLShortener.Controllers
             return Ok(url);
         }
 
-        
+
         [HttpPost]
         public IActionResult ShortenUrl(string url, string token, string description)
         {
@@ -69,10 +69,11 @@ namespace URLShortener.Controllers
         }
 
 
-        [HttpDelete]
-        public IActionResult Remove(int id)
+        [HttpDelete("{id}")]
+        public IActionResult Remove(string shortUrl)
         {
-           _urlService.DeleteUrl(id);
+         
+           _urlService.DeleteUrl(shortUrl);
             return Ok("URL Deleted Succesfully");
         }
         
