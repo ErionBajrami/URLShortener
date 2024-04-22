@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
 using URLShortener.Models;
@@ -26,15 +27,34 @@ public class URLSearchController : ControllerBase
     [HttpGet]
     public IActionResult SearchUrl(string UrlName, string token)
     {
+        if (string.IsNullOrEmpty(token))
+        {
+            return Unauthorized("Token is missing");
+        }
+
+        // Verify the token
+        var principal = TokenService.VerifyToken(token);
+        if (principal == null)
+        {
+            return Unauthorized("Invalid token");
+        }
 
         if (string.IsNullOrEmpty(UrlName))
         {
             return BadRequest("Please type something...");
         }
 
+        // Extract the user ID from the token
+        var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User ID not found in token");
+        }
+        var userId = int.Parse(userIdClaim.Value);
 
+        // Search for URLs belonging to the authenticated user
         var results = _context.Urls
-            .Where(url => url.OriginalUrl.Contains(UrlName.ToLower()))
+            .Where(url => url.UserId == userId && url.OriginalUrl.Contains(UrlName.ToLower()))
             .ToList()
             .Select(url => new UrlResponseDto()
             {
@@ -53,7 +73,8 @@ public class URLSearchController : ControllerBase
     }
 
 
-    [HttpGet(Name="Admin Search")]
+    /**
+    [HttpGet(Name="AdminSearch")]
     public IActionResult SearchUrlByAdmin(string UrlName)
     {
 
@@ -104,5 +125,5 @@ public class URLSearchController : ControllerBase
         }
 
         return NotFound("No matching Urls");
-    }
+    } */
 }
