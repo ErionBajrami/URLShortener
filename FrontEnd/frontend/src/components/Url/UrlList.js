@@ -1,49 +1,54 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "./Url.scss";
+import './Url.scss';
 
-const UrlList = () => {
+const UrlList = ({ userId }) => {
     const [urls, setUrls] = useState([]);
-    const token = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`https://localhost:7295/Urls/${token}`);
+                const response = await axios.get(`http://localhost:5284/api/User/${userId}/urls`);
                 setUrls(response.data.urls);
-                console.log("response-data", response.data.urls);
             } catch (error) {
-                console.log("Error fetching data: ", error);
+                console.log('Error fetching data: ', error);
             }
         };
+
         fetchData();
-    }, [token]);
+    }, [userId]);
+
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text)
+            .then(() => alert('Copied to clipboard'))
+            .catch((err) => console.error('Failed to copy:', err));
+    };
 
     return (
         <div className="urlList-container">
-  <h2>Your Previous Urls</h2>
-  <div className="table-container">
-    <table className="url-table">
-      <thead>
-        <tr>
-          <th>Original URL</th>
-          <th>Short Url</th>
-          <th>Date Created</th>
-        </tr>
-      </thead>
-      <tbody>
-        {urls.map((url) => (
-          <tr key={url.id}>
-            <td>{url.originalUrl}</td>
-            <td>{"http://localhost:3000/" + url.shortUrl}</td>
-            <td>{url.dateCreated}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
+            <h2>Previous Urls for User with id: {userId}</h2>
+            <table className="url-table">
+                <thead>
+                    <tr>
+                        <th>Original URL</th>
+                        <th>Short Url</th>
+                        <th>Number of Clicks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {urls.map((url) => (
+                        <tr key={url.id}>
+                            <td style={{ width: '50%' }}>{url.originalUrl}</td>
+                            <td>{"http://localhost:3000/" + url.shortUrl}</td>
+                            <td>{url.nrOfClicks}</td>
+                            <td><button onClick={() => copyToClipboard("http://localhost:3000/" + url.shortUrl)}>Copy</button></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 
 export default UrlList;
+s
