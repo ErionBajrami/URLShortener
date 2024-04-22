@@ -11,7 +11,7 @@ const UrlList = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5284/api/User/${userId}/urls`);
+                const response = await axios.get(`https://localhost:7295/Urls/${token}`);
                 setUrls(response.data.urls);
             } catch (error) {
                 console.log('Error fetching data: ', error);
