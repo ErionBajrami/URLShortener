@@ -18,15 +18,21 @@ namespace URLShortener.Service.User
 
         public IEnumerable<UserUrls> GetAllUsers()
         {
-            return _context.Users
-                .Select(user => new UserUrls
+            var usersWithUrls = _context.Users
+                .GroupJoin(_context.Urls,
+                user => user.Id,
+                url => url.UserId,
+                (user, urls) => new UserUrls
                 {
                     Id = user.Id,
                     Email = user.Email,
                     FullName = user.FullName,
-                    CreatedAt = user.CreatedAt
+                    CreatedAt = user.CreatedAt,
+                    Urls = urls.ToList()
                 })
                 .ToList();
+
+            return usersWithUrls;
         }
 
         public UserUrls? GetUserById(int id)

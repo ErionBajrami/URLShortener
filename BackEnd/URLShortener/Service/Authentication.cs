@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
+using URLShortener.Service;
 
 namespace URLShortener.Service
 {
@@ -31,6 +33,35 @@ namespace URLShortener.Service
             }
 
             return userId;
+        }
+
+        public static bool IsAdminFromToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return false;
+            }
+
+            // Verify the token
+            var principal = TokenService.VerifyToken(token);
+            if (principal == null)
+            {
+                return false;
+            }
+
+            // Extract the isAdmin claim from the token
+            var isAdminClaim = principal.FindFirst("IsAdmin");
+            if (isAdminClaim == null)
+            {
+                return false;
+            }
+
+            if (!bool.TryParse(isAdminClaim.Value, out bool isAdmin))
+            {
+                return false;
+            }
+
+            return isAdmin;
         }
     }
 }

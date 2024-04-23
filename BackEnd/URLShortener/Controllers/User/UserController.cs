@@ -55,13 +55,15 @@ namespace URLShortener.Controllers
             var urls = _userService.GetUserWithUrls(userId);
             if (urls == null)
             {
-                return NotFound("No URLs found for the user");
+               return NotFound("No URLs found for the user");
             }
-
             return Ok(urls);
+ 
+
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login([FromBody] LoginModel request)
         {
             var user = _context.Users
@@ -73,7 +75,9 @@ namespace URLShortener.Controllers
                 return Unauthorized("Email or password did not match");
             }
 
-            var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
+            bool isAdmin = user.Email == "admin@admin.com" && request.Password == "admin";
+
+            var token = TokenService.GenerateToken(user.Id, user.Email, user.Email, isAdmin);
 
             if (token == null || token == string.Empty)
             {
@@ -85,6 +89,7 @@ namespace URLShortener.Controllers
         }
         
         [HttpPost("signup")]
+        [AllowAnonymous]
         public IActionResult Add([FromBody] SignUpModel request)
         { 
             var newUser = _userService.AddUser(request);
@@ -112,6 +117,13 @@ namespace URLShortener.Controllers
         {
             _userService.DeleteUser(id);
             return Ok($"User with ID {id} deleted successfully");
+        }
+
+        [HttpGet("isAdmin")]
+        public bool isAdmin(string token)
+        {
+            bool isAdmin = Authentication.IsAdminFromToken(token);
+            return isAdmin;
         }
     }
 }

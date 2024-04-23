@@ -25,6 +25,7 @@ namespace URLShortener.Service.Url
                     ShortUrl = url.ShortUrl,
                     NrOfClicks = url.NrOfClicks,
                     UserId = url.UserId,
+                    Description = url.Description,
                 })
             .ToList();
         }

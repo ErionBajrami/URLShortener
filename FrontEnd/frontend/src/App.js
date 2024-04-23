@@ -8,6 +8,7 @@ import LoginPage from "./Pages/LoginPage";
 import Redirector from "./components/Url/Redirector";
 import PrivateOutlet from "./PrivateOutlet";
 import RegisterPage from "./Pages/RegisterPage";
+import AnalyticsPage from "./Pages/AnalyticsPage";
 
 function App() {
   const [url, setUrl] = useState("");
@@ -29,6 +30,7 @@ function App() {
             <Route path="/:shortUrl" element={<Redirector />} />
             <Route path="/urls" element={<UrlPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
           </Route>
         </Routes>
         <Footer />

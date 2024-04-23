@@ -1,17 +1,32 @@
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import './Navbar.scss';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  console.log('isAuthenticated', isAuthenticated)
+  console.log('isAuthenticated', isAuthenticated);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     // Check if user is authenticated by verifying token existence
-    const token = localStorage.getItem('token');
     setIsAuthenticated(token !== null);
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            // Check if the user is an admin
+            const isAdminResponse = await axios.get(`https://localhost:7295/api/User/isAdmin?token=${token}`);
+            setIsAdmin(isAdminResponse.data);
+        } catch (error) {
+            console.log("Error fetching data: ", error);
+        }
+    };
+    fetchData();
+}, [token]);
 
   const handleLogout = () => {
     // Clear token from storage upon logout
@@ -32,6 +47,11 @@ const Navbar = () => {
           <li>
             <Link to="/search">Search</Link>
           </li>
+          {isAdmin && (
+              <li>
+               <Link to="/analytics">Analytics</Link>
+             </li>
+          )}
         </ul>
       </div>
       <div>
