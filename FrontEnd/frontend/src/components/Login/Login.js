@@ -4,18 +4,19 @@ import './Login.scss';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+
+const API = process.env.API_URL;
+
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5284/api/User/login', { email, password });
+      const response = await axios.post(`https://localhost:7295/api/User/login`, { email, password });
       const token = response.data;
       console.log('Login successful! Token:', token);
       setError('');

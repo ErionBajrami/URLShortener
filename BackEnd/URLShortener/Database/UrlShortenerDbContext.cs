@@ -10,8 +10,8 @@ namespace URLShortener.Database
         {
         }
 
-        public DbSet<URL> Urls { get; set; }
-        public DbSet<User> Users { get; set; }
+        public virtual DbSet<URL> Urls { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
     }
 }
