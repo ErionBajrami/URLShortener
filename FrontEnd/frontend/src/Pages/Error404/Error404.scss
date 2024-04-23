@@ -1,0 +1,28 @@
+.error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    >.link {
+      appearance: none;
+      border-radius: 5px;
+      color: #fff;
+      padding: 0.2rem 1.5rem;
+      background-color: #007bff;
+      opacity: 1;
+      transition: all 0.3s;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+  
+  .error-image {
+    width: 200px;
+    margin-bottom: 20px;
+  }
+  
+  .error-container h2 {
+    margin-bottom: 1rem;
+  }

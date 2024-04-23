@@ -1,33 +1,64 @@
+
+
 .navbar {
-    background-color: #333;
-    color: white;
-    display: flex;
-    justify-content: space-around;
+  background-color: #333;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 0.7rem;
+  @media screen and (width > 640px) {
+    flex-direction: row;
     align-items: center;
-    padding: 10px;
-    position: fixed;
-    transition: background-color 0.3s ease;
-    width: 100%;
-  
+  }
+
+  div:has(>ul) {
+    margin: 0 auto;
     ul {
       list-style-type: none;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 20%;
+      gap: 1rem;
   
       li {
-        margin-right: 10px;
-        font-size: 19px;
-        cursor: pointer;
+        &:not(:last-child) {
+          cursor: pointer;
+          @media screen and (width > 640px) {
+            font-size: 19px;
+          }
+        }
+        & > input[type="search"] {
+          width: 100%;
+          max-width: 200px;
+          border-radius: 5px;
+          padding-left: 4px;
+          color: #000;
+          &:focus-visible {
+            outline: none;
+          }
+        }
       }
     }
-  
-    .login {
-      background-color: #4caf50;
+  }
+
+  .login {
+    & button {
+      background-color: #988DFF;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 8px 20px;
       border-radius: 5px;
       cursor: pointer;
+      text-wrap: nowrap;
     }
   }
+
+  .logo {
+    display: flex;
+    width: 100%;
+    max-width: 150px;
+  }
+}

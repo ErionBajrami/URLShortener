@@ -1,5 +1,8 @@
 .footer {
     position: fixed;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
     margin-top:200px;
     bottom: 0;
     width: 100%;
@@ -7,5 +10,21 @@
     color: #fff;
     text-align: center;
     padding: 20px;
+    font-size: 13px;
+
+    &__links {
+        &>ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 0.7rem;
+            & li>a {
+                color: #eee;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
 }
 
