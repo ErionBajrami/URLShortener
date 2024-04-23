@@ -12,7 +12,7 @@ namespace URLShortener.Service.User
 
         public UserService(IConfiguration configuration, UrlShortenerDbContext context)
         {
-             _context = context;
+            _context = context;
             _configuration = configuration;
         }
 
