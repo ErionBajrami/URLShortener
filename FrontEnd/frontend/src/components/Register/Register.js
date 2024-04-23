@@ -13,8 +13,8 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Call register function from AuthService with email, password, and full name
-      const response = await axios.post('http://localhost:5284/api/User/signup', { email, password, fullName });
+      // Call register function  with email, password, and full name
+      const response = await axios.post('https://localhost:7295/api/User/signup', { email, password, fullName });
       setRegistered(true); // Set registered status to true
       setError('');
     } catch (error) {

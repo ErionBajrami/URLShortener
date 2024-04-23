@@ -1,27 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import "./Url.scss";
 
 const UrlShortener = ({ url, setUrl, onShorten }) => {
-  // const shortenUrl = async () => {
-  //   try {
-  //     const response = await axios.post(`http://localhost:5284/api/URL?url=${url}&userId=1`);
-  //     onShorten(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
-  // const get = async () => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:5284/${onShorten}`);
-  //     // window.location.href = response.data; // Redirect to the shortened URL
-  //     const longUrl = response.data;
-  //     window.location.href = longUrl;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
   const [description, setDescription] = useState("");
   const [urls, setUrls] = useState([]);
   const token  = localStorage.getItem('token');
@@ -40,35 +21,6 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-        try {
-            const response = await axios.get(`https://localhost:7295/Urls/${token}`);
-            setUrls(response.data.urls);
-            console.log("response-data", response.data.urls);
-        } catch (error) {
-            console.log("Error fetching data: ", error);
-        }
-    };
-    fetchData();
-}, [token]);
-
-  const get = async () => {
-    try {
-      const encodedUrl = encodeURIComponent(url);
-      const response = await axios.get(`https://localhost:5284/${encodedUrl}`);
-      const longUrl = response.data;
-
-      // Check if the longUrl starts with a valid protocol (e.g., http:// or https://)
-      if (isValidUrl(longUrl)) {
-        window.location.replace(longUrl); // Redirect to the external URL
-      } else {
-        console.error("Invalid URL format:", longUrl);
-      }
-    } catch (error) {
-      console.error("Error redirecting:", error);
-    }
-  };
 
   const isValidUrl = (url) => {
     return url.startsWith("http://") || url.startsWith("https://");

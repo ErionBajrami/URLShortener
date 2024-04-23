@@ -17,12 +17,10 @@ namespace URLShortener.Controllers
     [EnableCors]
     public class UserController : Controller
     {
-        private UrlShortenerDbContext _context;
         private readonly IUserService _userService;
 
-        public UserController(UrlShortenerDbContext context, IUserService userService)
+        public UserController(IUserService userService)
         {
-            _context = context;
             _userService = userService;
         }
 
@@ -55,26 +53,20 @@ namespace URLShortener.Controllers
             var urls = _userService.GetUserWithUrls(userId);
             if (urls == null)
             {
-                return NotFound("No URLs found for the user");
+               return NotFound("No URLs found for the user");
             }
-
             return Ok(urls);
+ 
+
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public IActionResult Login([FromBody] LoginModel request)
         {
-            var user = _context.Users
-                .Where(user => user.Email == request.Email)
-                .FirstOrDefault(user => user.PasswordHash == request.Password);
-
-            if (user == null)
-            {
-                return Unauthorized("Email or password did not match");
-            }
-
-            var token = TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash);
-
+           
+            var token = _userService.Login(request);
+      
             if (token == null || token == string.Empty)
             {
                 return BadRequest(new { message = "UserName or Password is incorrect" });
@@ -85,13 +77,17 @@ namespace URLShortener.Controllers
         }
         
         [HttpPost("signup")]
-        public IActionResult Add([FromBody] SignUpModel request)
+        [AllowAnonymous]
+        public IActionResult Signup([FromBody] SignUpModel request)
         { 
+
             var newUser = _userService.AddUser(request);
+
             if (newUser != null)
             {
                 return Ok(newUser);
             }
+
             return Conflict("Email is already taken");
 
         }
@@ -99,19 +95,33 @@ namespace URLShortener.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, UserUpdate userInput)
         {
+
             var updatedUser = _userService.UpdateUser(id, userInput);
+
             if (updatedUser != null)
             {
                 return Ok(updatedUser);
             }
+
             return NotFound($"User with ID {id} not found");
         }
 
         [HttpDelete]
         public IActionResult DeleteUser(int id) 
         {
+
             _userService.DeleteUser(id);
             return Ok($"User with ID {id} deleted successfully");
+
+        }
+
+        [HttpGet("isAdmin")]
+        public bool isAdmin(string token)
+        {
+
+            bool isAdmin = Authentication.IsAdminFromToken(token);
+            return isAdmin;
+
         }
     }
 }

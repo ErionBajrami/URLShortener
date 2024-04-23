@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Claims;
 using URLShortener.Database;
 using URLShortener.ModelHelpers;
@@ -34,6 +36,31 @@ public class URLSearchController : ControllerBase
         }
 
         int userId = Authentication.GetUserIdFromToken(token);
+
+        bool admin = Authentication.IsAdminFromToken(token);
+
+        if (admin)
+        {
+            var resultsAdmin = _context.Urls
+                .Where(url => url.OriginalUrl.Contains(UrlName.ToLower()))
+                .ToList()
+                .Select(url => new UrlResponseDto()
+                {
+                    UserId = url.UserId,
+                    OriginalUrl = url.OriginalUrl,
+                    ShortUrl = url.ShortUrl,
+                    Description = url.Description
+                })
+                .ToList();
+
+            if (resultsAdmin.Any())
+            {
+                return Ok(resultsAdmin);
+            }
+
+            return NotFound("No matching Urls");
+        }
+
 
         // Search for URLs belonging to the authenticated user
         var results = _context.Urls

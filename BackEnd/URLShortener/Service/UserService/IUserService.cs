@@ -10,8 +10,10 @@ namespace URLShortener.Service.User
         IEnumerable<UserUrls> GetAllUsers();
         UserUrls GetUserById(int id);
         UserUrls GetUserWithUrls(int id);
+        string Login(LoginModel req);
         SignUpModel AddUser(SignUpModel request);
         UserUpdate UpdateUser(int id, UserUpdate userInput);
         void DeleteUser(int id);
+
     }
 }
