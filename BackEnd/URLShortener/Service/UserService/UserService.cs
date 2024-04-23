@@ -8,12 +8,10 @@ namespace URLShortener.Service.User
     public class UserService : IUserService
     {
         private readonly UrlShortenerDbContext _context;
-        private readonly IConfiguration _configuration;
 
-        public UserService(IConfiguration configuration, UrlShortenerDbContext context)
+        public UserService(UrlShortenerDbContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         public IEnumerable<UserUrls> GetAllUsers()
@@ -66,6 +64,24 @@ namespace URLShortener.Service.User
                 Urls = userUrls
             };
         }
+
+        public string Login(LoginModel req)
+        {
+
+            var user = _context.Users
+                .Where(user => user.Email == req.Email)
+                .FirstOrDefault(user => user.PasswordHash == req.Password);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            bool isAdmin = user.Email == "admin@admin.com" && user.PasswordHash == "admin";
+
+            return TokenService.GenerateToken(user.Id, user.Email, user.PasswordHash, isAdmin);
+        }
+
 
         public SignUpModel AddUser(SignUpModel request)
         {

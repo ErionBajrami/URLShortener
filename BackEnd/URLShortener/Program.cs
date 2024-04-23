@@ -70,11 +70,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 //});
 
 
-//Configure the DB context
-//builder.Services.AddDbContext<UrlShortenerDbContext>(options =>
-//{
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-//});
 
 builder.Services.AddDbContext<UrlShortenerDbContext>(options => options
     .UseNpgsql("Host=localhost;Database=URLSHORTENER;Username=postgres;Password=postgres"));
@@ -97,9 +92,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-//Seed the database
-// DbInitializer.SeedDefaultData(app);
 
 app.Run();
 

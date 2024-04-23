@@ -8,7 +8,7 @@ const Redirector = () => {
   useEffect(() => {
     const redirectToOriginalUrl = async () => {
       try {
-        const response = await axios.get(`http://localhost:5284/${shortUrl}`);
+        const response = await axios.get(`https://localhost:7295/${shortUrl}`);
         const originalUrl = response.data;
 
         // Redirect to the original URL

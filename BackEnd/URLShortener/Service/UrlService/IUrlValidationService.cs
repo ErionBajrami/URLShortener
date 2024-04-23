@@ -3,6 +3,5 @@
     public interface IUrlValidationService
     {
         bool IsValidUrl(string url);
-
     }
 }
