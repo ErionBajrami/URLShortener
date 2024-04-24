@@ -4,8 +4,6 @@ import "./Url.scss";
 
 const UrlShortener = ({ url, setUrl, onShorten }) => {
   const [description, setDescription] = useState("");
-  const [urls, setUrls] = useState([]);
-  const token  = localStorage.getItem('token');
 
   const shortenUrl = async () => {
     const token = localStorage.getItem('token');
@@ -21,6 +19,23 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
     }
   };
 
+  const redirectToOriginalUrl = async () => {
+    try {
+      const encodedUrl = encodeURIComponent(url);
+      const response = await axios.get(`https://localhost:7295/${encodedUrl}`);
+      console.log('encodedUrl', encodedUrl);
+      const longUrl = response.data;
+
+      // Check if the longUrl starts with a valid protocol (e.g., http:// or https://)
+      if (isValidUrl(longUrl)) {
+        window.open(longUrl, '_blank');// Redirect to the original URL
+      } else {
+        console.error("Invalid URL format:", longUrl);
+      }
+    } catch (error) {
+      console.error("Error redirecting:", error);
+    }
+  };
 
   const isValidUrl = (url) => {
     return url.startsWith("http://") || url.startsWith("https://");
@@ -46,6 +61,10 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
       <button className="button" onClick={shortenUrl}>
         Shorten URL
       </button>
+      <button className="button" onClick={redirectToOriginalUrl}>
+        Redirect
+      </button>
+  
     </div>
   );
 };
