@@ -31,20 +31,22 @@ function LoginForm() {
   }
 
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
-      <h2>Sign in to your account</h2>
-      <div className="form-group">
-        <label>Email:</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email address' />
-      </div>
-      <div className="form-group">
-        <label>Password:</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
-      </div>
-      {error && <div className="error-message">{error}</div>}
-      <button type="submit" className="submit-btn">Login</button>
-      <p>Don't have an account? <Link to="/register" className="registerLink">Register here</Link></p>
-    </form>
+    <div className='login'>
+      <form className="login-form" id="loginForm" onSubmit={handleSubmit}>
+        <h2>Sign in to your account</h2>
+        <div className="form-group">
+          <label>Email:</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email address' />
+        </div>
+        <div className="form-group">
+          <label>Password:</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
+        </div>
+        {error && <div className="error-message">{error}</div>}
+        <button type="submit" className="submit-btn">Login</button>
+        <p>Don't have an account? <Link to="/register" className="registerLink">Register here</Link></p>
+      </form>
+    </div>
   );
 }
 

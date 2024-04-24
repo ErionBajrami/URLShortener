@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
 import Footer from "./components/Footer/Footer";
 import HomePage from "./Pages/HomePage";
 import UrlPage from "./Pages/UrlPage";
@@ -8,7 +8,7 @@ import LoginPage from "./Pages/LoginPage";
 import Redirector from "./components/Url/Redirector";
 import PrivateOutlet from "./PrivateOutlet";
 import RegisterPage from "./Pages/RegisterPage";
-import ErrorComponent from "./Pages/Error404/Error404";
+import ErrorComponent from "./components/Error404/Error404";
 import AnalyticsPage from "./Pages/AnalyticsPage";
 
 function App() {
@@ -34,7 +34,6 @@ function App() {
           </Route>
           <Route path="*" element={<ErrorComponent />} />
         </Routes>
-        <Footer />
       </Router>
     </div>
   );

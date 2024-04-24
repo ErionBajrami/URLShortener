@@ -28,23 +28,26 @@ function Register() {
   }
 
   return (
-    <form className="register-form" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label>Email:</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </div>
-      <div className="form-group">
-        <label>Password:</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </div>
-      <div className="form-group">
-        <label>Full Name:</label>
-        <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-      </div>
-      {error && <div className="error-message">{error}</div>}
-      <button type="submit" className="submit-btn">Register</button>
-      <p>Already have an account? <Link to="/login" className="loginLink">Login here</Link></p>
-    </form>
+    <div className='register'>
+        <form className="register-form" id="registerForm" onSubmit={handleSubmit}>
+        <h2>Register Here</h2>
+        <div className="form-group">
+          <label>Email:</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label>Password:</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        </div>
+        <div className="form-group">
+          <label>Full Name:</label>
+          <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+        </div>
+        {error && <div className="error-message">{error}</div>}
+        <button type="submit" className="submit-btn">Register</button>
+        <p>Already have an account? <Link to="/login" className="loginLink">Login here</Link></p>
+      </form>
+    </div>
   );
 }
 

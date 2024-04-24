@@ -1,59 +1,73 @@
-.login-form {
-  max-width: 400px; 
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.login {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; 
 
-  >h2 {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .form-group {
-    margin-bottom: 20px;
-    width: 100%;
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    
-  }
-
-  .submit-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
+  .login-form {
+    width: 40%; 
+    margin: 0 auto;
+    padding: 10%;
+    border: 1px solid #ccc;
+    box-shadow: 8px 2px 5px #ccc;
     border-radius: 5px;
-    cursor: pointer;
-
-    :hover {
-      background-color: #0056b3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+    >h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
     }
-    
+  
+    .form-group {
+      margin-bottom: 20px;
+      width: 100%;
+  
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+  
+      input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+    }
+  
+    .submit-btn {
+      display: block;
+      width: 40%;
+      padding: 10px;
+      font-size: 18px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+  
+      :hover {
+        background-color: #0056b3;
+      }
+      
+    }
+  
+    .registerLink {
+      color:#2879d0;
+      font-weight: bold;
+      font-size: 18px;
+    }
   }
+}
 
-  .registerLink {
-    color:#2879d0;
-    font-weight: bold;
-    font-size: 18px;
+@media (max-width: 900px) {
+  #loginForm {
+    width: 75%;
   }
 }
 

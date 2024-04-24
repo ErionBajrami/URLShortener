@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Analytics from '../components/Analytics/Analytics';
 import Navbar from '../components/Navbar/Navbar';
+import Footer from '../components/Footer/Footer';
 
 const AnalyticsPage = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -24,6 +25,7 @@ const AnalyticsPage = () => {
     <div>
       <Navbar />
       <Analytics />
+      <Footer />
     </div>
   ) : (
     <div style={{ fontWeight: 'bolder', fontSize: "23px", color: "red"}}>Unauthorized</div>
