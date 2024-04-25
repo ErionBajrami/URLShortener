@@ -12,7 +12,7 @@ const AnalyticsPage = () => {
     const fetchData = async () => {
       try {
         // Check if the user is an admin
-        const isAdminResponse = await axios.get(`https://localhost:7295/api/User/isAdmin?token=${token}`);
+        const isAdminResponse = await axios.get(`http://localhost:5001/api/User/isAdmin?token=${token}`);
         setIsAdmin(isAdminResponse.data);
       } catch (error) {
         console.log('Error fetching data: ', error);

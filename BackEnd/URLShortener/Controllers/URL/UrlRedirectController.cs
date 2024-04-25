@@ -36,6 +36,8 @@ namespace URLShortener.Controllers
                     _context.SaveChanges();
 
                     // Redirect to the original URL
+                   // return Ok(urlMapping.OriginalUrl);
+
                     return Ok(urlMapping.OriginalUrl);
                 }
                 else

@@ -3,9 +3,8 @@ import { Navigate } from 'react-router-dom';
 import './Login.scss'; 
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../../config.js'; // Import the BASE_URL
 
-
-const API = process.env.API_URL;
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -15,7 +14,7 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:7295/api/User/login', { email, password });
+      const response = await axios.post(`${BASE_URL}/api/User/login`, { email, password });
       const token = response.data;
       console.log('Login successful! Token:', token);
       setError('');

@@ -10,7 +10,7 @@ const Search = () => {
   const handleSearch = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`https://localhost:7295/api/search?UrlName=${searchQuery}&token=${token}`);
+      const response = await axios.get(`http://localhost:5001/api/search?UrlName=${searchQuery}&token=${token}`);
       setSearchResults(response.data);
       console.log('response', response.data);
       setError('');

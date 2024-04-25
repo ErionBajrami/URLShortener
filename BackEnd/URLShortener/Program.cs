@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 
@@ -15,7 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -72,7 +77,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddDbContext<UrlShortenerDbContext>(options => options
-    .UseNpgsql("Host=postgres;Database=postgres;Username=admin;Password=admin"));
+    .UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
 var app = builder.Build();
 
@@ -80,7 +85,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+    });
+
+    //using (var scope = app.Services.CreateScope())
+    //{
+    //    var db = scope.ServiceProvider.GetRequiredService<UrlShortenerDbContext>();
+    //    db.Database.Migrate();
+    //}
+    //app.Run();
 }
 
 app.UseHttpsRedirection();

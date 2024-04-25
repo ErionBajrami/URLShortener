@@ -1,50 +1,43 @@
 version: '3.8'
 
 services:
-  backend:
-    container_name: backend
-    build:
-      context: ./Backend/
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: postgres
-    depends_on:
-      - postgres
-    networks:
-      - URL
-
-  frontend:
-    container_name: frontend
-    build:
-      context: ./FrontEnd/Frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    environment:
-      REACT_APP_API_URL: http://backend:5000
-    depends_on:
-      - backend
-    networks:
-      - URL
-
   postgres:
     container_name: postgres
+    restart: always
     image: postgres:latest
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: postgres
-    networks:
-      - URL
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: URLShortener
 
-networks:
-  URL:
-    external: true
+  backend:
+    container_name: backend
+    restart: always
+    build:
+      context: ./BackEnd/
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: URLShortener
+    depends_on:
+      - postgres
+
+  frontend:
+    container_name: frontend
+    restart: always
+    build:
+      context: ./FrontEnd/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      REACT_APP_API_URL: http://backend:80
+    depends_on:
+      - backend
