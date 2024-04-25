@@ -72,7 +72,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddDbContext<UrlShortenerDbContext>(options => options
-    .UseNpgsql("Host=localhost;Database=URLSHORTENER;Username=postgres;Password=postgres"));
+    .UseNpgsql("Host=postgres;Database=postgres;Username=admin;Password=admin"));
 
 var app = builder.Build();
 

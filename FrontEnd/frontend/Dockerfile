@@ -1,13 +1,17 @@
-FROM node:18.19.1
-
+# Use Node.js image as base
+FROM node:14 AS build-env
 WORKDIR /app
 
-COPY package.json .
-
+# Copy package.json and install dependencies
+COPY package.json ./
 RUN npm install
 
-COPY . .
+# Copy the rest of the app and build
+COPY . ./
+RUN npm run build
 
-EXPOSE 3000
-
-CMD ["npm", "start"]
+# Production build
+FROM nginx:alpine
+COPY --from=build-env /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

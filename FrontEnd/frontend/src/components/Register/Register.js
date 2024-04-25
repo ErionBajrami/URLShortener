@@ -14,7 +14,7 @@ function Register() {
     e.preventDefault();
     try {
       // Call register function  with email, password, and full name
-      const response = await axios.post('https://localhost:7295/api/User/signup', { email, password, fullName });
+      const response = await axios.post('http://backend:5000/api/User/signup', { email, password, fullName });
       setRegistered(true); // Set registered status to true
       setError('');
     } catch (error) {
