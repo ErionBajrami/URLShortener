@@ -9,6 +9,7 @@
   align-items: center;
   padding: 10px;
   gap: 0.7rem;
+  max-height: 50px;
   @media screen and (width > 640px) {
     flex-direction: row;
     align-items: center;
@@ -22,25 +23,6 @@
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-  
-      li {
-        &:not(:last-child) {
-          cursor: pointer;
-          @media screen and (width > 640px) {
-            font-size: 19px;
-          }
-        }
-        & > input[type="search"] {
-          width: 100%;
-          max-width: 200px;
-          border-radius: 5px;
-          padding-left: 4px;
-          color: #000;
-          &:focus-visible {
-            outline: none;
-          }
-        }
-      }
     }
   }
 
@@ -61,4 +43,5 @@
     width: 100%;
     max-width: 150px;
   }
+
 }
