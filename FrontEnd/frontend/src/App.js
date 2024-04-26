@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
-import Footer from "./components/Footer/Footer";
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from "./Pages/HomePage";
 import UrlPage from "./Pages/UrlPage";
 import SearchPage from "./Pages/SearchPage";
@@ -25,9 +24,9 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route element={<PrivateOutlet />}>
-            <Route index element={<HomePage />} />
-            <Route path="/urls" element={<UrlPage />} />
+         <Route element={<PrivateOutlet />}>
+         <Route index element={<HomePage />} />
+          <Route path="/urls" element={<UrlPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/:shortUrl" element={<Redirector />} />
             <Route path="/analytics" element={<AnalyticsPage />} />

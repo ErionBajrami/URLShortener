@@ -1,19 +1,13 @@
-
-
 .navbar {
   background-color: #333;
   color: white;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 10px;
   gap: 0.7rem;
-  max-height: 50px;
-  @media screen and (width > 640px) {
-    flex-direction: row;
-    align-items: center;
-  }
+  max-height: 80px;
 
   div:has(>ul) {
     margin: 0 auto;

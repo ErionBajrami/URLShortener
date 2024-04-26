@@ -44,6 +44,31 @@
 
         }
       }
+
+        
+ @media (max-width: 800px) {
+    .table {
+      display: flex;
+      flex-direction: column;
+
+      tr {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+
+      th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ccc;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+    }
+  }
 }
   
   

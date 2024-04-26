@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import './Navbar.scss';
@@ -13,7 +12,7 @@ const Navbar = () => {
   useEffect(() => {
     // Check if user is authenticated by verifying token existence
     setIsAuthenticated(token !== null);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +36,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="logo">
-        <img src="/static/images/Logo.svg" loading="lazy" />
+        <img src="/static/images/Logo.svg" loading="lazy" alt="logo" />
       </div>
       <div>
         <ul className="navbar-list">
