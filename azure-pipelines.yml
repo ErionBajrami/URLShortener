@@ -37,3 +37,30 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+    
+    - task: PublishSymbols@1
+      displayName: "Publish symbols path: "
+      inputs: 
+       SearchPattern: '**\bin\**\*.pdb'
+      continueOnEror: true
+      
+    - task: CopyFiles@1
+      displayName: 'Copy Files to: ${build.artifactsagingdirectory}'
+      inputs: 
+       SourceFolder: '$(build.sourcesdirectory'
+       Contents: |
+        **\bin\$(BuildConfiguration)\**
+        src\*.testsettings
+       TargetFolder: '$(build.artifactstagingdirectory)'
+      condition: succededOrFailed()
+      
+    - task: PublishArtifacts@1
+      displayName: 'Publish artifact: drop'
+      inputs: 
+        PathtoPublish: '$(build.artifactstatigingdirectory)'
+      condition: succededOrFailed()
