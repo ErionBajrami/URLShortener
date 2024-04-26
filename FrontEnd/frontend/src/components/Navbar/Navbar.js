@@ -55,9 +55,6 @@ const Navbar = () => {
                <Link to="/analytics">Analytics</Link>
              </li>
           )}
-          <li>
-            <input type="search" placeholder="Search..."/>
-          </li>
         </ul>
       </div>
       <div className="login">

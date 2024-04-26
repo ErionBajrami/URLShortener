@@ -1,0 +1,47 @@
+version: '3.8'
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+services:
+  urlshortener.database:
+    image: postgres:latest
+    container_name: urlshortener.database
+    environment:
+      - POSTGRES_DB=URLShortener
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ../BackEnd/.containers/urlshortener-db:/var/lib/postgresql/data
+    ports:
+      - 5002:5432
+    networks:
+      - backend
+
+  urlshortener:
+    image: erionbajrami/urlshortener:v2
+    container_name: urlshortener
+    ports:
+      - "5001:80"
+    depends_on:
+      - urlshortener.database
+    environment:
+      - POSTGRES_DB=URLShortener
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=urlshortener.database
+    networks:
+      - frontend
+      - backend
+
+  frontend:
+    image: erionbajrami/reactapp:latest
+    container_name: FRONTENDD
+    ports:
+      - "3000:80"
+    networks:
+      - frontend
+

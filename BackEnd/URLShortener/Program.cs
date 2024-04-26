@@ -51,28 +51,6 @@ builder.Services.AddScoped<IUrlService, UrlService>();
 builder.Services.AddScoped<IUrlValidationService, UrlValidationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
-//builder.Services.AddAuthentication()
-//    .AddJwtBearer();
-//builder.Services.ConfigureOptions<JwtBearerOptions>();
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    var configuration = builder.Configuration; // Accessing Configuration via builder
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = configuration["Jwt:Issuer"],
-//        ValidAudience = configuration["Jwt:Issuer"],
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
-//    };
-//});
 
 
 
@@ -90,17 +68,17 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
     });
 
-    //using (var scope = app.Services.CreateScope())
-    //{
-    //    var db = scope.ServiceProvider.GetRequiredService<UrlShortenerDbContext>();
-    //    db.Database.Migrate();
-    //}
-    //app.Run();
 }
 
 app.UseHttpsRedirection();
 
-app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:3000") // Update with your frontend URL
+           .AllowAnyMethod()
+           .AllowAnyHeader()
+           .AllowCredentials(); // If your frontend sends credentials (e.g., cookies) with the requests
+});
 
 app.UseAuthentication();
 
