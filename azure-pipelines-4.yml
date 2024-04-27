@@ -12,6 +12,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '910109fd-5e37-4ce0-b22a-57ede8fa1a20'
   imageRepository: 'erionbajramiurlshortener'
+  uiBuild: '/FrontEnd/frontend/build'
   containerRegistry: 'urlshortenerr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/FrontEnd/frontend/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -28,11 +29,13 @@ stages:
     pool:
       name: 'selfhosted'
     steps:
-    - task: NodeTool@0
-      inputs:
-        versionSource: 'spec'
-        versionSpec: '14.x'
-      
+    
+    - script: 
+        pushd $(uiBuild)
+        npm install
+        npm run build
+        popd
+      displayName: 'npm install and build'
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
