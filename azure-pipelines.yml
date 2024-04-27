@@ -6,7 +6,7 @@ trigger:
 - master
 
 pool:
-  name: 'selfhosted'
+  name: selfhosted
 
 resources:
 - repo: self
