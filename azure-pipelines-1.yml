@@ -20,7 +20,7 @@ steps:
 - task: Docker@2
   displayName: 'Push Docker image'
   inputs:
-    command: 'push'
     containerRegistry: 'myurlcontainer'  # Replace with your ACR service connection name
-    repository: '***/urlshortenerr'  # Specify the repository to push to
-    tags: 'NEW'  # Specify the custom tag 'NEW' for the pushed image
+    repository: 'urlshortenerr.azurecr.io'  # Specify the repository to push to
+    command: 'push'
+    tags: 'latest'  # Specify the custom tag 'NEW' for the pushed image
