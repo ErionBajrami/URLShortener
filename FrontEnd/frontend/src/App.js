@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from "./Pages/HomePage";
 import UrlPage from "./Pages/UrlPage";
@@ -11,27 +11,20 @@ import ErrorComponent from "./components/Error404/Error404";
 import AnalyticsPage from "./Pages/AnalyticsPage";
 
 function App() {
-  const [url, setUrl] = useState("");
-  console.log('Token stored:', localStorage.getItem('token'));
-
-  const handleShorten = (shortenedUrl) => {
-    setUrl(shortenedUrl);
-  };
-
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/*" element={<ErrorComponent />} /> 
          <Route element={<PrivateOutlet />}>
-         <Route index element={<HomePage />} />
-          <Route path="/urls" element={<UrlPage />} />
+            <Route index element={<HomePage />} />
+            <Route path="/urls" element={<UrlPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/:shortUrl" element={<Redirector />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
           </Route>
-          <Route path="*" element={<ErrorComponent />} />
         </Routes>
       </Router>
     </div>

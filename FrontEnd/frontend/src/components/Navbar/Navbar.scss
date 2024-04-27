@@ -37,5 +37,15 @@
     width: 100%;
     max-width: 150px;
   }
+}
 
+@media (max-width: 750px) {
+  #navbar {
+    font-size: 14px;
+    padding: 0;
+  }
+
+  #logo {
+    width: 70px;
+  }
 }

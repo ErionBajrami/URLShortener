@@ -34,23 +34,23 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar">
-      <div className="logo">
+    <div id="navbar" className="navbar bg-gray-900 text-white flex flex-row justify-between items-center px-6 py-4 text-lg">
+      <div className="logo" id="logo">
         <img src="/static/images/Logo.svg" loading="lazy" alt="logo" />
       </div>
       <div>
         <ul className="navbar-list">
-          <li>
+          <li className='pl-2 pr-2 hover:text-sky-200' id="item">
             <Link to="/">Home</Link>
           </li>
-          <li>
+          <li  className='pl-2 pr-2 hover:text-sky-200' id="item">
             <Link to="/urls">Urls</Link>
           </li>
-          <li>
+          <li  className='pl-2 pr-2 hover:text-sky-200' id="item">
             <Link to="/search">Search</Link>
           </li>
           {isAdmin && (
-              <li>
+              <li  className='pl-2 pr-2 hover:text-sky-200' id="item">
                <Link to="/analytics">Analytics</Link>
              </li>
           )}

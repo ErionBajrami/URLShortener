@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "./Url.scss";
 
@@ -14,6 +14,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
         `http://localhost:5001/api/URL?url=${encodedUrl}&token=${token}&description=${encodedDescription}`
       );
       onShorten(response.data);
+      setDescription(""); // Clear the description after shortening
     } catch (error) {
       console.error("Error shortening URL:", error);
     }
@@ -68,6 +69,5 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
     </div>
   );
 };
-
 
 export default UrlShortener;

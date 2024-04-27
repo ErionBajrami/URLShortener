@@ -14,7 +14,7 @@ function Register() {
     e.preventDefault();
     try {
       // Call register function  with email, password, and full name
-      const response = await axios.post('http://localhost:5001/api/User/signup', { email, password, fullName });
+      await axios.post('http://localhost:5001/api/User/signup', { email, password, fullName });
       setRegistered(true); // Set registered status to true
       setError('');
     } catch (error) {
@@ -30,7 +30,7 @@ function Register() {
   return (
     <div className='register'>
         <form className="register-form" id="registerForm" onSubmit={handleSubmit}>
-        <h2>Register Here</h2>
+        <h2 className='text-blue-950 font-bold'>Register Here</h2>
         <div className="form-group">
           <label>Email:</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -45,7 +45,7 @@ function Register() {
         </div>
         {error && <div className="error-message">{error}</div>}
         <button type="submit" className="submit-btn">Register</button>
-        <p>Already have an account? <Link to="/login" className="loginLink">Login here</Link></p>
+        <p className='pt-4'>Already have an account? <Link to="/login" className="loginLink font-bold text-lg">Login Here!</Link></p>
       </form>
     </div>
   );
