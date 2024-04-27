@@ -6,39 +6,25 @@ trigger:
 pool:
   name: selfhosted
 
-resources:
-  repositories:
-    - repository: self
-      type: git
-      ref: master
-
 variables:
-  dockerRegistryServiceConnection: '7e3cb83e-f8f4-41be-8fc7-32c2ea285be2'
-  imageRepository: 'urlshortenerr'
-  containerRegistry: 'urlshortenerr.azurecr.io'
+  dockerRegistryServiceConnection: 'myurlcontainer'  # Replace with your ACR service connection name
+  imageRepository: 'urlshortenerr'  # Replace with your image repository name
+  containerRegistry: 'urlshortenerr.azurecr.io'  # Replace with your ACR login server
   dockerfilePath: '$(Build.SourcesDirectory)/BackEnd/Dockerfile'
   tag: '$(Build.BuildId)'
 
-stages:
-- stage: Build
-  displayName: 'Build stage'
-  jobs:
-  - job: Build
-    displayName: 'Build'
-    steps:
-    - task: Docker@2
-      displayName: 'Build Docker image'
-      inputs:
-        command: 'build'
-        repository: '$(imageRepository)'
-        dockerfile: '$(dockerfilePath)'
-        containerRegistry: '$(dockerRegistryServiceConnection)'
-        tags: '$(tag)'  # Add tags to the Docker image
+steps:
+- task: Docker@2
+  displayName: 'Build Docker image'
+  inputs:
+    command: 'build'
+    dockerfile: '$(dockerfilePath)'
+    tags: '$(containerRegistry)/$(imageRepository):$(tag)'  # Specify the image name with registry and repository
 
-    - task: Docker@2
-      displayName: 'Push Docker image to container registry'
-      inputs:
-        command: 'push'
-        repository: '$(imageRepository)'
-        containerRegistry: '$(dockerRegistryServiceConnection)'
-        tags: '$(tag)'  # Push the same tags as used during the build
+- task: Docker@2
+  displayName: 'Push Docker image'
+  inputs:
+    command: 'push'
+    containerRegistry: '$(dockerRegistryServiceConnection)'
+    repository: '$(containerRegistry)/$(imageRepository)'  # Specify the repository to push to
+    tags: '$(tag)'  # Specify the tag for the pushed image
