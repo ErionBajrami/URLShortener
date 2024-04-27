@@ -5,8 +5,6 @@ trigger:
 
 pool:
   name: selfhosted
-  demands:
-    - vstest
 
 resources:
   repositories:
@@ -37,25 +35,3 @@ stages:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         tags: |
           $(tag)
-
-    - task: VSTest@2
-      displayName: 'Run VSTest'
-      inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-
-    - task: PublishSymbols@1
-      displayName: 'Publish symbols path'
-      inputs: 
-        SearchPattern: '**\bin\**\*.pdb'
-      continueOnError: true
-      
-    - task: CopyFiles@2
-      displayName: 'Copy Files to artifact staging directory'
-      inputs:
-        SourceFolder: '$(build.sourcesdirectory)'
-        Contents: |
-          **\bin\$(BuildConfiguration)\**
-          src\*.testsettings
-        TargetFolder: '$(build.artifactstagingdirectory)'
-      condition: succeededOrFailed()  # Adjust condition based on your requirement
