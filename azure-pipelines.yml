@@ -4,7 +4,7 @@ trigger:
       - master
 
 pool:
-  name: selfhosted
+  selfhosted: agent
   demands:
     - vstest  # Ensure the agent has the 'vstest' capability
 
