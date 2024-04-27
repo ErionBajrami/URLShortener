@@ -20,3 +20,15 @@ spec:
         env:
         - name: SOME_ENV_VAR
           value: some-value
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: url-shortener
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: url-shortener
