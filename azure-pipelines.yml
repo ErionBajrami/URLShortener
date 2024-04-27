@@ -4,7 +4,7 @@ trigger:
       - master
 
 pool:
-  selfhosted: agent
+  name: 'selfhosted'
   demands:
     - vstest  # Ensure the agent has the 'vstest' capability
     - agent.version -equals 3.238.0
