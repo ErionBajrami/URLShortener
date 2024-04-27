@@ -4,19 +4,18 @@ trigger:
       - master
 
 pool:
-  name: 'selfhosted'
+  name: selfhosted
   demands:
-    - vstest  # Ensure the agent has the 'vstest' capability
-    - Agent.version -equals 3.238.0
+    - vstest
+    - agent.version -equals 3.238.0
 
 resources:
   repositories:
     - repository: self
       type: git
-      ref: master  # Specify the branch to use
+      ref: master
 
 variables:
-  # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '7e3cb83e-f8f4-41be-8fc7-32c2ea285be2'
   imageRepository: 'urlshortener'
   containerRegistry: 'myurlcontainer.azurecr.io'
