@@ -1,0 +1,62 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  name: selfhosted
+  demands:
+    - vstest
+    - agent.version -equals 3.238.0
+
+resources:
+  repositories:
+    - repository: self
+      type: git
+      ref: master
+
+variables:
+  dockerRegistryServiceConnection: '7e3cb83e-f8f4-41be-8fc7-32c2ea285be2'
+  imageRepository: 'urlshortener'
+  containerRegistry: 'myurlcontainer.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/BackEnd/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: 'Build and push stage'
+  jobs:
+  - job: Build
+    displayName: 'Build'
+    steps:
+    - task: Docker@2
+      displayName: 'Build and push an image to container registry'
+      inputs:
+        command: 'buildAndPush'
+        repository: '$(imageRepository)'
+        dockerfile: '$(dockerfilePath)'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        tags: |
+          $(tag)
+
+    - task: VSTest@2
+      displayName: 'Run VSTest'
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: PublishSymbols@1
+      displayName: 'Publish symbols path'
+      inputs: 
+        SearchPattern: '**\bin\**\*.pdb'
+      continueOnError: true
+      
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: |
+          **\bin\$(BuildConfiguration)\**
+          src\*.testsettings
+        TargetFolder: '$(build.artifactstagingdirectory)'
+      condition: succeededOrFailed()  # Adjust condition based on your requirement

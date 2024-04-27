@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+      - master
+
+resources:
+  repositories:
+    - repository: self
+      ref: refs/heads/master
+
+variables:
+  imageRepository: 'urlshortenerr.azurecr.io'
+  dockerfilePath: './BackEnd/Dockerfile'
+  tag: '$(Build.BuildId)'
+  dockerRegistryServiceConnection: 'myurlcontainer'
+
+stages:
+- stage: Build
+  displayName: Build and Push
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: 'selfhosted'
+    steps:
+    - task: Docker@2
+      displayName: 'Build and push an image to container registry'
+      inputs:
+        command: 'buildAndPush'
+        repository: '$(imageRepository)'
+        dockerfile: '$(dockerfilePath)'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        tags: '$(tag)'
