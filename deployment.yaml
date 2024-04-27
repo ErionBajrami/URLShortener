@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: url-shortener
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: url-shortener
@@ -16,7 +16,7 @@ spec:
       - name: url-shortener
         image: urlshortenerr.azurecr.io/erionbajramiurlshortener:$(tag)
         ports:
-        - containerPort: 80
+        - containerPort: 5000
 ---
 apiVersion: v1
 kind: Service
@@ -25,7 +25,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 80
+  - protocol: TCP
+    port: 5000
+    targetPort: 500
   selector:
     app: url-shortener
