@@ -14,8 +14,8 @@ resources:
 
 variables:
   dockerRegistryServiceConnection: '7e3cb83e-f8f4-41be-8fc7-32c2ea285be2'
-  imageRepository: 'urlshortener'
-  containerRegistry: 'myurlcontainer.azurecr.io'
+  imageRepository: 'urlshortenerr'
+  containerRegistry: 'urlshortenerr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/BackEnd/Dockerfile'
   tag: '$(Build.BuildId)'
 
