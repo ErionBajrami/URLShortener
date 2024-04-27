@@ -1,17 +1,18 @@
-# Docker
-# Build and push an image to Azure Container Registry
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
-- master
+  branches:
+    include:
+      - master
 
 pool:
   name: selfhosted
   demands:
-   - vstest
+    - vstest  # Ensure the agent has the 'vstest' capability
 
 resources:
-- repo: self
+  repositories:
+    - repository: self
+      type: git
+      ref: master  # Specify the branch to use
 
 variables:
   # Container registry service connection established during pipeline creation
@@ -23,40 +24,39 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build and push stage
+  displayName: 'Build and push stage'
   jobs:
   - job: Build
-    displayName: Build
+    displayName: 'Build'
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: 'Build and push an image to container registry'
       inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
+        command: 'buildAndPush'
+        repository: '$(imageRepository)'
+        dockerfile: '$(dockerfilePath)'
+        containerRegistry: '$(dockerRegistryServiceConnection)'
         tags: |
           $(tag)
 
     - task: VSTest@2
+      displayName: 'Run VSTest'
       inputs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-    
+
     - task: PublishSymbols@1
-      displayName: "Publish symbols path: "
+      displayName: 'Publish symbols path'
       inputs: 
-       SearchPattern: '**\bin\**\*.pdb'
+        SearchPattern: '**\bin\**\*.pdb'
       continueOnError: true
       
-    - task: CopyFiles@1
-      displayName: 'Copy Files to: ${build.artifactsagingdirectory}'
-      inputs: 
-       SourceFolder: '$(build.sourcesdirectory'
-       Contents: |
-        **\bin\$(BuildConfiguration)\**
-        src\*.testsettings
-       TargetFolder: '$(build.artifactstagingdirectory)'
-      condition: succeededOrFailed()
-    
-    
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
+      inputs:
+        SourceFolder: '$(build.sourcesdirectory)'
+        Contents: |
+          **\bin\$(BuildConfiguration)\**
+          src\*.testsettings
+        TargetFolder: '$(build.artifactstagingdirectory)'
+      condition: succeededOrFailed()  # Adjust condition based on your requirement
