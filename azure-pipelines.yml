@@ -5,6 +5,9 @@
 trigger:
 - master
 
+pool:
+  name: 'selfhosted'
+
 resources:
 - repo: self
 
@@ -16,17 +19,12 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/BackEnd/Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-
 stages:
 - stage: Build
   displayName: Build and push stage
   jobs:
   - job: Build
     displayName: Build
-    pool:
-      vmImage: $(vmImageName)
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -47,7 +45,7 @@ stages:
       displayName: "Publish symbols path: "
       inputs: 
        SearchPattern: '**\bin\**\*.pdb'
-      continueOnEror: true
+      continueOnError: true
       
     - task: CopyFiles@1
       displayName: 'Copy Files to: ${build.artifactsagingdirectory}'
@@ -62,5 +60,5 @@ stages:
     - task: PublishArtifacts@1
       displayName: 'Publish artifact: drop'
       inputs: 
-        PathtoPublish: '$(build.artifactstatigingdirectory)'
+        PathToPublish: '$(build.artifactstatigingdirectory)'
       condition: succededOrFailed()
