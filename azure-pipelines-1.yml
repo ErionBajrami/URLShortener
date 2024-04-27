@@ -7,6 +7,11 @@ trigger:
 
 pool:
   name: selfhosted
+  demands:
+    - vstest
+    - agent.version -equals 3.238.0
+    - Agent.Version -ge 3.238.0
+
 
 resources:
 - repo: self
