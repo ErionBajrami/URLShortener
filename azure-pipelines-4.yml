@@ -28,10 +28,11 @@ stages:
     pool:
       name: 'selfhosted'
     steps:
-    - task: Npm@1
+    - task: NodeTool@0
       inputs:
-        command: 'install'
-        workingDir: '$(Build.SourcesDirectory)/FrontEnd/frontend/'
+        versionSource: 'spec'
+        versionSpec: '14.x'
+      
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
