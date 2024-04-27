@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: url-shortener
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: url-shortener
@@ -17,10 +17,7 @@ spec:
         image: urlshortenerr.azurecr.io/erionbajramiurlshortener:$(tag)
         ports:
         - containerPort: 80
-        env:
-        - name: SOME_ENV_VAR
-          value: some-value
-
+---
 apiVersion: v1
 kind: Service
 metadata:
