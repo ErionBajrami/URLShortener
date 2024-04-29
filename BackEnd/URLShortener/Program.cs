@@ -51,11 +51,9 @@ builder.Services.AddScoped<IUrlService, UrlService>();
 builder.Services.AddScoped<IUrlValidationService, UrlValidationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddDbContext<UrlShortenerDbContext>(options =>
+    options.UseNpgsql("Host = urlshortenerdatabase; Port = 5432; Database = URLShortener; Username = postgres; Password = postgres; Include Error Detail=true"));
 
-
-
-builder.Services.AddDbContext<UrlShortenerDbContext>(options => options
-    .UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
 var app = builder.Build();
 
@@ -74,7 +72,7 @@ app.UseHttpsRedirection();
 
 app.UseCors(builder =>
 {
-    builder.WithOrigins("http://localhost:3000") // Update with your frontend URL
+    builder.WithOrigins("http://4.226.33.78:3000") // Update with your frontend URL
            .AllowAnyMethod()
            .AllowAnyHeader()
            .AllowCredentials(); // If your frontend sends credentials (e.g., cookies) with the requests
