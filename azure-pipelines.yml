@@ -19,7 +19,7 @@ variables:
   dockerRegistryServiceConnection: '7e3cb83e-f8f4-41be-8fc7-32c2ea285be2'
   imageRepository: 'urlshortener'
   containerRegistry: 'myurlcontainer.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/BackEnd/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/FrontEnd/frontend/Dockerfile'
   tag: '$(Build.BuildId)'
 
 stages:
