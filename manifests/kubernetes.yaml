@@ -1,0 +1,137 @@
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-postgre
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urlshortenerdatabase
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: urlshortenerdatabase
+  template:
+    metadata:
+      labels:
+        app: urlshortenerdatabase
+    spec:
+      containers:
+      - name: urlshortenerdatabase
+        image: urlshortenerproject.azurecr.io/images/postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: POSTGRES_DB
+          value: URLShortener
+        - name: PGDATA
+          value: /var/lib/postgresql/backup
+        volumeMounts:
+        - name: database
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: database
+        persistentVolumeClaim:
+          claimName: pvc-postgre
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: urlshortenerdatabase
+spec:
+  selector:
+    app: urlshortenerdatabase
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urlshortener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: urlshortener
+  template:
+    metadata:
+      labels:
+        app: urlshortener
+    spec:
+      containers:
+        - name: urlshortener
+          image: urlshortenerproject.azurecr.io/images/backend:latest
+          ports:
+            - containerPort: 5001
+          env:
+            - name: POSTGRES_DB
+              value: "URLShortener"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_HOST
+              value: "urlshortenerdatabase"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: urlshortener
+spec:
+  selector:
+    app: urlshortener
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: urlshortenerproject.azurecr.io/images/frontend:latest
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 80
+  type: LoadBalancer
