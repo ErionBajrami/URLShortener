@@ -14,7 +14,7 @@ function Register() {
     e.preventDefault();
     try {
       // Call register function  with email, password, and full name
-      await axios.post('http://localhost:5001/api/User/signup', { email, password, fullName });
+      await axios.post('http://4.226.18.9:5001/api/User/signup', { email, password, fullName });
       setRegistered(true); // Set registered status to true
       setError('');
     } catch (error) {

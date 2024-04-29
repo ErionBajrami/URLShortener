@@ -8,7 +8,7 @@ const UrlList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/URL');
+        const response = await axios.get('http://4.226.18.9:5001/api/URL');
         setUrls(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -19,7 +19,7 @@ const UrlList = () => {
 
   const handleDeleteUrl = async (id) => {
     try {
-      await axios.delete(`http://localhost:5001/api/URL/${id}`);
+      await axios.delete(`http://4.226.18.9:5001/api/URL/${id}`);
       setUrls(urls.filter(url => url.id !== id));
     } catch (error) {
       console.error('Error deleting URL:', error);
@@ -31,7 +31,7 @@ const UrlList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5001/api/User');
+        const response = await axios.get('http://4.226.18.9:5001/api/User');
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -42,7 +42,7 @@ const UrlList = () => {
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:5001/api/User?id=${id}`);
+      await axios.delete(`http://4.226.18.9:5001/api/User?id=${id}`);
       setUsers(users.filter(user => user.id !== id));
     } catch (error) {
       console.error('Error deleting user:', error);

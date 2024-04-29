@@ -9,15 +9,15 @@ const HomeUrl = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-          const isAdmin = await axios.get(`http://localhost:5001/api/User/isAdmin?token=${token}`);
+          const isAdmin = await axios.get(`http://4.226.18.9:5001/api/User/isAdmin?token=${token}`);
           setIsAdmin((isAdmin.data));
           console.log('isAdmin', isAdmin);
             try {
               if(!(isAdmin.data)) {
-                const response = await axios.get(`http://localhost:5001/Urls/${token}`);
+                const response = await axios.get(`http://4.226.18.9:5001/Urls/${token}`);
                 setUrls(response.data.urls);
               } else {
-                const response = await axios.get('http://localhost:5001/api/User');
+                const response = await axios.get('http://4.226.18.9:5001/api/User');
                 console.log("response-data", response.data);
                 setAdminUrls(response.data);
               }

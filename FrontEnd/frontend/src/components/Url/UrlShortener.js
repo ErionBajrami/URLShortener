@@ -11,7 +11,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
       const encodedUrl = encodeURIComponent(url);
       const encodedDescription = encodeURIComponent(description); // Encode the description
       const response = await axios.post(
-        `http://localhost:5001/api/URL?url=${encodedUrl}&token=${token}&description=${encodedDescription}`
+        `http://4.226.18.9:5001/api/URL?url=${encodedUrl}&token=${token}&description=${encodedDescription}`
       );
       onShorten(response.data);
       setDescription(""); // Clear the description after shortening
@@ -23,7 +23,7 @@ const UrlShortener = ({ url, setUrl, onShorten }) => {
   const redirectToOriginalUrl = async () => {
     try {
       const encodedUrl = encodeURIComponent(url);
-      const response = await axios.get(`http://localhost:5001/${encodedUrl}`);
+      const response = await axios.get(`http://4.226.18.9:5001/${encodedUrl}`);
       console.log('encodedUrl', encodedUrl);
       const longUrl = response.data;
 

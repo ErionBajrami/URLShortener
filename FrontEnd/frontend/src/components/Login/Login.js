@@ -12,7 +12,7 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5001/api/User/login`, { email, password });
+      const response = await axios.post(`http://4.226.18.9:5001/api/User/login`, { email, password });
       const token = response.data;
       console.log('Login successful! Token:', token);
       setError('');

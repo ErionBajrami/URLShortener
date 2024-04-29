@@ -18,7 +18,7 @@ const Navbar = () => {
     const fetchData = async () => {
         try {
             // Check if the user is an admin
-            const isAdminResponse = await axios.get(`http://localhost:5001/api/User/isAdmin?token=${token}`);
+            const isAdminResponse = await axios.get(`http://4.226.18.9:5001/api/User/isAdmin?token=${token}`);
             setIsAdmin(isAdminResponse.data);
         } catch (error) {
             console.log("Error fetching data: ", error);

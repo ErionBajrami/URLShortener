@@ -11,7 +11,7 @@ const UrlList = ({ userId }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5001/Urls/${token}`);
+                const response = await axios.get(`http://4.226.18.9:5001/Urls/${token}`);
                 setUrls(response.data.urls);
             } catch (error) {
                 console.log('Error fetching data: ', error);
@@ -23,7 +23,7 @@ const UrlList = ({ userId }) => {
 
     const handleEditDescription = async (id, newDescription) => {
       try {
-        await axios.put(`http://localhost:5001/api/Url/${id}?description=${newDescription}`);
+        await axios.put(`http://4.226.18.9:5001/api/Url/${id}?description=${newDescription}`);
         //Update the description in the state
         const updatedUrls = urls.map(url => {
           if(url.id === id) {
